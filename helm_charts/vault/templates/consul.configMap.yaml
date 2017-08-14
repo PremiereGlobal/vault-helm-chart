@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Consul.ComponentName}}
+    app: {{ template "name" . }}
+data:
+  config.json : |
+    {
+      "bind_addr": "0.0.0.0",
+      "ca_file": "/etc/consul/ca/ca.crt.pem",
+      "cert_file": "/etc/consul/tls/tls.crt",
+      "client_addr": "0.0.0.0",
+      "data_dir": "/consul/data",
+      "datacenter": {{.Values.Consul.Datacenter | quote }},
+      "key_file": "/etc/consul/tls/tls.key",
+      "ports": {
+        "http": -1,
+        "https": {{.Values.Consul.HttpPort}}
+      },
+      "verify_incoming_rpc": true,
+      "verify_incoming_https": true,
+      "verify_outgoing": true,
+      "verify_server_hostname": true
+    }

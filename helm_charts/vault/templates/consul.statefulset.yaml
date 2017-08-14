@@ -1,0 +1,141 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Consul.ComponentName}}
+    app: {{ template "name" . }}
+spec:
+  serviceName: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+  replicas: {{ .Values.Consul.Replicas }}
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+      labels:
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        component: {{.Values.Consul.ComponentName}}
+        app: {{ template "name" . }}
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+        image: "{{.Values.Consul.Image}}:{{.Values.Consul.ImageTag}}"
+        imagePullPolicy: "{{.Values.Consul.ImagePullPolicy}}"
+        ports:
+        - name: http
+          containerPort: {{.Values.Consul.HttpPort}}
+        - name: serflan-tcp
+          protocol: "TCP"
+          containerPort: {{.Values.Consul.SerflanPort}}
+        - name: serflan-udp
+          protocol: "UDP"
+          containerPort: {{.Values.Consul.SerflanUdpPort}}
+        - name: serfwan-tcp
+          protocol: "TCP"
+          containerPort: {{.Values.Consul.SerfwanPort}}
+        - name: serfwan-udp
+          protocol: "UDP"
+          containerPort: {{.Values.Consul.SerfwanUdpPort}}
+        - name: server
+          containerPort: {{.Values.Consul.ServerPort}}
+        - name: consuldns
+          containerPort: {{.Values.Consul.ConsulDnsPort}}
+        resources:
+          requests:
+            cpu: "{{.Values.Consul.Cpu}}"
+            memory: "{{.Values.Consul.Memory}}"
+        env:
+        - name: INITIAL_CLUSTER_SIZE
+          value: {{ .Values.Consul.Replicas | quote }}
+        - name: STATEFULSET_NAME
+          value: "{{ template "fullname" . }}-{{.Values.Consul.ComponentName}}"
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: STATEFULSET_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: config
+          mountPath: /etc/consul/config
+        - name: gossip-key
+          mountPath: /etc/consul/secrets
+          readOnly: true
+        - name: tls
+          mountPath: /etc/consul/tls
+          readOnly: true
+        - name: ca
+          mountPath: /etc/consul/ca
+          readOnly: true
+        livenessProbe:
+          exec:
+            command:
+            - consul
+            - members
+            - "-ca-file=/etc/consul/ca/ca.crt.pem"
+            - "-client-cert=/etc/consul/tls/tls.crt"
+            - "-client-key=/etc/consul/tls/tls.key"
+            - "-http-addr=https://127.0.0.1:{{.Values.Consul.HttpPort}}"
+            - "-tls-server-name={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}"
+          initialDelaySeconds: 300
+          timeoutSeconds: 5
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |
+            IP=$(hostname -i)
+
+            if [ -e /etc/consul/secrets/gossip-key ]; then
+              echo "{\"encrypt\": \"$(cat /etc/consul/secrets/gossip-key)\"}" > /etc/consul/encrypt.json
+              GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+            fi
+
+            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+                while true; do
+                    echo "Waiting for ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME} to come up"
+                    ping -W 1 -c 1 ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME}.${STATEFULSET_NAMESPACE}.svc.cluster.local > /dev/null && break
+                    sleep 1s
+                done
+            done
+
+            PEERS=""
+            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+                PEERS="${PEERS}${PEERS:+ } -retry-join $(ping -c 1 ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME}.${STATEFULSET_NAMESPACE}.svc.cluster.local | awk -F'[()]' '/PING/{print $2}')"
+            done
+
+            docker-entrypoint.sh \
+              consul \
+              agent \
+              -config-dir /etc/consul/config \
+              -server \
+              -bootstrap-expect=${INITIAL_CLUSTER_SIZE} \
+              -advertise=${IP} \
+              ${PEERS} \
+              ${GOSSIP_KEY}
+
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+          items:
+          - key: config.json
+            path: config.json
+      - name: gossip-key
+        secret:
+          secretName: {{ template "fullname" . }}-consul-gossip-key
+      - name: tls
+        secret:
+          secretName: {{ template "fullname" . }}-consul.tls
+      - name: ca
+        secret:
+          secretName: {{ template "fullname" . }}-consul.ca

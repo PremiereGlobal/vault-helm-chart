@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Vault.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Vault.ComponentName}}
+    app: {{ template "name" . }}
+data:
+  config.json : |
+    storage "consul" {
+      address = "unix:///consul-unix-socket/consul-client.sock"
+      scheme = "http"
+      disable_registration = "{{default "false" .Values.Vault.DisableConsulRegistration}}"
+    }
+    listener "tcp" {
+      address = "0.0.0.0:{{.Values.Vault.HttpPort}}"
+      tls_key_file = "/etc/vault/tls/tls.key"
+      tls_cert_file = "/etc/vault/tls/tls.crt"
+    }
+    disable_mlock = false
+    default_lease_ttl = "{{.Values.Vault.DefaultLeaseTtl}}"
+    max_lease_ttl = "{{.Values.Vault.MaxLeaseTtl}}"
+
+# disable_mlock - set to false to disable memory from being swapped to disk

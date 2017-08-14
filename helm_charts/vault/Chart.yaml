@@ -1,0 +1,15 @@
+apiVersion: v1
+description: A Hashicorp Vault chart for Kubernetes
+name: vault
+version: 0.1.0
+keywords: [hashicorp, vault, secret, consul]
+icon: https://raw.githubusercontent.com/docker-library/docs/726714ced14b1e14b6dd99fc82f20f14f1d3cfb1/vault/logo.png
+sources:
+  - https://github.com/hashicorp/vault
+  - https://github.com/hashicorp/consul
+  - https://github.com/djenriquez/vault-ui
+maintainers:
+  - name: Ryan Wilcox
+    email: ryan.wilcox@readytalk.com
+  - name: Chris Bartlett
+    email: christopher.bartlett@readytalk.com

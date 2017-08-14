@@ -1,0 +1,51 @@
+{{- if (not .Values.Vault.Tls.LetsEncrypt.Enabled) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Vault.PreInstall.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Vault.PreInstall.ComponentName}}
+    app: {{ template "name" . }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "100"
+spec:
+  activeDeadlineSeconds: {{.Values.Vault.PreInstall.JobDeadline}}
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-{{.Values.Vault.PreInstall.ComponentName}}
+      labels:
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        component: {{.Values.Vault.PreInstall.ComponentName}}
+        app: {{ template "name" . }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ template "fullname" . }}-{{.Values.Vault.PreInstall.ComponentName}}
+        image: bartlettc/omgwtfssl-kubernetes
+        imagePullPolicy: "Always"
+        env:
+          - name: CA_EXPIRE
+            value: "60"
+          - name: SSL_EXPIRE
+            value: "60"
+          - name: SSL_IP
+            value: "127.0.0.1"
+          - name: SSL_SUBJECT
+            value: "{{.Values.Vault.Tls.ServerName}}"
+          - name: SSL_DNS
+            value: "{{.Values.Vault.Tls.AlternateServerNames}}"
+          - name: SILENT
+            value: "true"
+          - name: K8S_SECRET_NAME
+            value: "{{ template "fullname" . }}.tls"
+          - name: K8S_SECRET_COMBINE_CA
+            value: "true"
+          - name: K8S_SECRET_LABELS
+            value: "heritage={{ .Release.Service }} release={{ .Release.Name }} chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }} component={{.Values.Vault.PreInstall.ComponentName }} app={{ template "name" . }}"
+{{- end }}

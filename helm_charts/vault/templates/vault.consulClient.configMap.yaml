@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Vault.ConsulClient.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Vault.ConsulClient.ComponentName}}
+    app: {{ template "name" . }}
+data:
+  config.json : |
+    {
+      "bind_addr": "0.0.0.0",
+      "ca_file": "/etc/consul/ca/ca.crt.pem",
+      "cert_file": "/etc/consul/tls/tls.crt",
+      "data_dir": "/consul/data",
+      "datacenter": {{.Values.Consul.Datacenter | quote }},
+      "key_file": "/etc/consul/tls/tls.key",
+      "addresses": {
+        "http": "unix:///consul-unix-socket/consul-client.sock"
+      },
+      "unix_sockets": {
+        "mode": "600"
+      },
+      "ports": {
+        "http": {{.Values.Consul.HttpPort}},
+        "https": -1
+      },
+      "client_addr": "0.0.0.0",
+      "verify_incoming": true,
+      "verify_outgoing": true,
+      "verify_server_hostname": true
+    }
+
+# Disabling verify_incoming which will disable client TLS auth

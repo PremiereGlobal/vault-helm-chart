@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Consul.PreInstall.ComponentName}}
+    app: {{ template "name" . }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "100"
+spec:
+  activeDeadlineSeconds: {{.Values.Consul.PreInstall.JobDeadline}}
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}
+      labels:
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        component: {{.Values.Consul.PreInstall.ComponentName}}
+        app: {{ template "name" . }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ template "fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}
+        image: "bartlettc/docker-kubectl"
+        imagePullPolicy: "Always"
+        env:
+          - name: FULL_NAME
+            value: {{ template "fullname" . }}
+          - name: DATACENTER
+            value: {{.Values.Consul.Datacenter}}
+          - name: TLS_COUNTRY_NAME
+            value: {{.Values.Consul.PreInstall.Tls.CountryName}}
+          - name: TLS_LOCALITY_NAME
+            value: {{.Values.Consul.PreInstall.Tls.LocalityName}}
+          - name: TLS_EMAIL_ADDRESS
+            value: {{.Values.Consul.PreInstall.Tls.EmailAddress}}
+          - name: TLS_ORGANIZATION_NAME
+            value: {{.Values.Consul.PreInstall.Tls.OrganizationName}}
+          - name: TLS_STATE_OR_PROVINCE_NAME
+            value: {{.Values.Consul.PreInstall.Tls.StateOrProvinceName}}
+          - name: TLS_ORGANIZATION_UNIT_NAME
+            value: {{.Values.Consul.PreInstall.Tls.OrganizationUnitName}}
+        command:
+        - "bash"
+        - "-ec"
+        - |
+          chmod -R +x /pre-install
+          cd /pre-install
+          ./generate-consul-tls-certs.sh
+          ./create-consul-secrets.sh
+          # /bin/sleep 1000
+        volumeMounts:
+        - name: pre-install
+          mountPath: /pre-install
+        - name: podinfo
+          mountPath: /etc/podinfo
+          readOnly: true
+      volumes:
+        - name: pre-install
+          configMap:
+            name: {{ template "fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels

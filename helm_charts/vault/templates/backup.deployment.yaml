@@ -1,0 +1,70 @@
+{{- if .Values.Backup.Enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Backup.ComponentName}}
+    app: {{ template "name" . }}
+spec:
+  replicas: {{ .Values.Backup.Replicas }}
+  template:
+    metadata:
+      labels:
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        component: {{.Values.Backup.ComponentName}}
+        app: {{ template "name" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+        image: "{{.Values.Backup.Image}}:{{.Values.Backup.ImageTag}}"
+        imagePullPolicy: {{.Values.Backup.ImagePullPolicy}}
+        env:
+        - name: "CONSUL_ARGS"
+          value: -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+        - name: "S3_URL"
+          value: {{.Values.Backup.S3_URL}}
+        resources:
+          limits:
+            cpu: {{ .Values.Backup.Cpu }}
+            memory: {{ .Values.Backup.Memory }}
+          requests:
+            cpu: {{ .Values.Backup.Cpu }}
+            memory: {{ .Values.Backup.Memory }}
+        volumeMounts:
+        - name: consul-config
+          mountPath: /consul/config
+        - name: tls-consul
+          mountPath: /consul/tls
+          readOnly: true
+        - name: ca-consul
+          mountPath: /consul/ca
+          readOnly: true
+        - name: gossip-key
+          mountPath: /consul/secrets
+          readOnly: true
+      volumes:
+      - name: consul-config
+        configMap:
+          name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+          items:
+          - key: config.json
+            path: config.json
+      - name: tls
+        secret:
+          secretName: {{ template "fullname" . }}.tls
+      - name: ca-consul
+        secret:
+          secretName: {{ template "fullname" . }}-consul.ca
+      - name: tls-consul
+        secret:
+          secretName: {{ template "fullname" . }}-consul.tls
+      - name: gossip-key
+        secret:
+          secretName: {{ template "fullname" . }}-consul-gossip-json
+{{- end }}

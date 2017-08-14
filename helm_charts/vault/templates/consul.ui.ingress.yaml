@@ -1,0 +1,33 @@
+{{- if .Values.Consul.Ui.Enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}-{{.Values.Consul.Ui.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    component: {{.Values.Consul.Ui.ComponentName}}
+    app: {{ template "name" . }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: {{.Values.Consul.Ui.Host}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ template "fullname" . }}-{{.Values.Consul.Ui.ComponentName}}
+          servicePort: 80
+  {{- $root := . -}}
+  {{- range .Values.Consul.Ui.AlternateServerNames | split "," }}
+  - host: {{ . | quote }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ template "fullname" $root }}-{{$root.Values.Consul.Ui.ComponentName}}
+          servicePort: 80
+  {{- end }}
+{{- end }}
