@@ -67,24 +67,24 @@ spec:
               fieldPath: metadata.namespace
         volumeMounts:
         - name: config
-          mountPath: /etc/consul/config
-        - name: gossip-key
-          mountPath: /etc/consul/secrets
+          mountPath: /consul/config
+        - name: gossip-json
+          mountPath: /consul/secrets
           readOnly: true
         - name: tls
-          mountPath: /etc/consul/tls
+          mountPath: /consul/tls
           readOnly: true
         - name: ca
-          mountPath: /etc/consul/ca
+          mountPath: /consul/ca
           readOnly: true
         livenessProbe:
           exec:
             command:
             - consul
             - members
-            - "-ca-file=/etc/consul/ca/ca.crt.pem"
-            - "-client-cert=/etc/consul/tls/tls.crt"
-            - "-client-key=/etc/consul/tls/tls.key"
+            - "-ca-file=/consul/ca/ca.crt.pem"
+            - "-client-cert=/consul/tls/tls.crt"
+            - "-client-key=/consul/tls/tls.key"
             - "-http-addr=https://127.0.0.1:{{.Values.Consul.HttpPort}}"
             - "-tls-server-name={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}"
           initialDelaySeconds: 300
@@ -94,11 +94,6 @@ spec:
           - "-ec"
           - |
             IP=$(hostname -i)
-
-            if [ -e /etc/consul/secrets/gossip-key ]; then
-              echo "{\"encrypt\": \"$(cat /etc/consul/secrets/gossip-key)\"}" > /etc/consul/encrypt.json
-              GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
-            fi
 
             for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
                 while true; do
@@ -116,13 +111,11 @@ spec:
             docker-entrypoint.sh \
               consul \
               agent \
-              -config-dir /etc/consul/config \
-              -server \
+              -config-dir=/consul/config \
+              -config-dir=/consul/secrets \
               -bootstrap-expect=${INITIAL_CLUSTER_SIZE} \
               -advertise=${IP} \
-              ${PEERS} \
-              ${GOSSIP_KEY}
-
+              ${PEERS}
       volumes:
       - name: config
         configMap:
@@ -130,9 +123,9 @@ spec:
           items:
           - key: config.json
             path: config.json
-      - name: gossip-key
+      - name: gossip-json
         secret:
-          secretName: {{ template "fullname" . }}-consul-gossip-key
+          secretName: {{ template "fullname" . }}-consul-gossip-json
       - name: tls
         secret:
           secretName: {{ template "fullname" . }}-consul.tls

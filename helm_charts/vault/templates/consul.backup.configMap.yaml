@@ -1,13 +1,13 @@
-{{- if .Values.Backup.Enabled }}
+{{- if .Values.Consul.Backup.Enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+  name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
   labels:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    component: {{.Values.Backup.ComponentName}}
+    component: {{.Values.Consul.Backup.ComponentName}}
     app: {{ template "name" . }}
 data:
   config.json : |

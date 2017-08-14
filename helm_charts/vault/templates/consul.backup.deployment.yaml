@@ -1,44 +1,49 @@
-{{- if .Values.Backup.Enabled }}
+{{- if .Values.Consul.Backup.Enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+  name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
   labels:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    component: {{.Values.Backup.ComponentName}}
+    component: {{.Values.Consul.Backup.ComponentName}}
     app: {{ template "name" . }}
 spec:
-  replicas: {{ .Values.Backup.Replicas }}
+  replicas: {{ .Values.Consul.Backup.Replicas }}
   template:
     metadata:
       labels:
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-        component: {{.Values.Backup.ComponentName}}
+        component: {{.Values.Consul.Backup.ComponentName}}
         app: {{ template "name" . }}
     spec:
       containers:
-      - name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
-        image: "{{.Values.Backup.Image}}:{{.Values.Backup.ImageTag}}"
-        imagePullPolicy: {{.Values.Backup.ImagePullPolicy}}
+      - name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+        image: "{{.Values.Consul.Backup.Image}}:{{.Values.Consul.Backup.ImageTag}}"
+        imagePullPolicy: {{.Values.Consul.Backup.ImagePullPolicy}}
+        command:
+          - "/bin/sh"
+          - "-ce"
+          - "sleep 999999999"
         env:
         - name: "CONSUL_ARGS"
-          value: -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
-        - name: "S3_URL"
-          value: {{.Values.Backup.S3_URL}}
+          value: -rejoin -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+        - name: "S3URL"
+          value: {{.Values.Consul.Backup.S3_URL}}
         resources:
           limits:
-            cpu: {{ .Values.Backup.Cpu }}
-            memory: {{ .Values.Backup.Memory }}
+            cpu: {{ .Values.Consul.Backup.Cpu }}
+            memory: {{ .Values.Consul.Backup.Memory }}
           requests:
-            cpu: {{ .Values.Backup.Cpu }}
-            memory: {{ .Values.Backup.Memory }}
+            cpu: {{ .Values.Consul.Backup.Cpu }}
+            memory: {{ .Values.Consul.Backup.Memory }}
         volumeMounts:
         - name: consul-config
           mountPath: /consul/config
+          readOnly: false
         - name: tls-consul
           mountPath: /consul/tls
           readOnly: true
@@ -51,7 +56,7 @@ spec:
       volumes:
       - name: consul-config
         configMap:
-          name: {{ template "fullname" . }}-{{.Values.Backup.ComponentName}}
+          name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
           items:
           - key: config.json
             path: config.json
