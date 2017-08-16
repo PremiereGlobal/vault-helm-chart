@@ -3,7 +3,7 @@ Consul:
   Cpu: "100m"
   Datacenter: "dc1"
   Image: "consul"
-  ImageTag: "0.9.0"
+  ImageTag: "0.9.2"
   ImagePullPolicy: "IfNotPresent"
   Memory: "256Mi"
   Replicas: 5
@@ -29,16 +29,18 @@ Consul:
     Enabled: false
     Host: "localhost"
     AlternateServerNames: "127.0.0.1" # Comma separated
-Backup:
-  Enabled: false
-  ComponentName: backup
-  Replicas: 1
-  ImagePullPolicy: "Always"
-  Image: "thorix/consul-backup"
-  ImageTag: "latest"
-  Cpu: "512m"
-  Memory: "200Mi"
-  S3_URL: "s3://<backup-bucket>/vault/"
+  Backup:
+    Enabled: false
+    ComponentName: "backup"
+    Replicas: 1
+    ImagePullPolicy: "Always"
+    Image: "thorix/consul-backup"
+    ImageTag: "latest"
+    Cpu: "512m"
+    Memory: "200Mi"
+    S3URL: "s3://<backup-bucket>" # {{ .Release.Name }} will get added to the end
+    SleepDuration: 1800 # 30mins
+    RestoreBackupFile: "" # This is the file to restore on install
 Vault:
   ComponentName: "vault"
   AutoUnseal: false

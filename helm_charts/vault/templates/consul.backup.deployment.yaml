@@ -31,8 +31,18 @@ spec:
         env:
         - name: "CONSUL_ARGS"
           value: -rejoin -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
-        - name: "S3URL"
-          value: {{.Values.Consul.Backup.S3_URL}}
+        - name: "S3_URL"
+          value: {{.Values.Consul.Backup.S3URL}}/{{ .Release.Name }}/
+        {{- if .Values.Vault.AutoRestore }}
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  /init.sh {{ template "tls_skip_verify" . }}
+        {{- end }}
         resources:
           limits:
             cpu: {{ .Values.Consul.Backup.Cpu }}

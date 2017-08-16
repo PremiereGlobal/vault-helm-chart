@@ -8,23 +8,14 @@ APP=$(grep "app=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 
 kubectl delete secrets -l release=$RELEASE compontent=$COMPONENT
 
-# Create k8s Secret for Consul Gossip Key
-GOSSIPKEY=$(cat /dev/urandom | head -c 24 | base64; echo)
-kubectl create secret generic \
-  $FULL_NAME-consul-gossip-key \
-  --from-literal=gossip-key=$GOSSIPKEY
-kubectl label secret \
-  $FULL_NAME-consul-gossip-key \
-  heritage=$HERITAGE \
-  release=$RELEASE \
-  chart=$CHART \
-  component=$COMPONENT \
-  app=$APP
-
 # Create K8s Secret for Consul Gossip Key in a json format so it can be mounted
+# It seems that k8s doesn't like to use JSON with --from-literal=
+GOSSIPKEY=$(cat /dev/urandom | head -c 24 | base64; echo)
+echo "{\"encrypt\": \"$GOSSIPKEY\"}" > encrypt.json
 kubectl create secret generic \
   $FULL_NAME-consul-gossip-json \
-  --from-literal=encrypt.json="{\\"encrypt\\": \\"$GOSSIPKEY\\"}"
+  --from-file=encrypt.json
+rm -rf encrypt.json
 kubectl label secret \
   $FULL_NAME-consul-gossip-json \
   heritage=$HERITAGE \
