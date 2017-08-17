@@ -18,8 +18,8 @@ data:
     }
     listener "tcp" {
       address = "0.0.0.0:{{.Values.Vault.HttpPort}}"
-      tls_key_file = "/etc/vault/tls/tls.key"
-      tls_cert_file = "/etc/vault/tls/tls.crt"
+      tls_key_file = "/vault/tls/tls.key"
+      tls_cert_file = "/vault/tls/tls.crt"
     }
     disable_mlock = false
     default_lease_ttl = "{{.Values.Vault.DefaultLeaseTtl}}"

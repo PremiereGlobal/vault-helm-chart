@@ -13,11 +13,11 @@ data:
   config.json : |
     {
       "bind_addr": "0.0.0.0",
-      "ca_file": "/etc/consul/ca/ca.crt.pem",
-      "cert_file": "/etc/consul/tls/tls.crt",
+      "ca_file": "/consul/ca/ca.crt.pem",
+      "cert_file": "/consul/tls/tls.crt",
       "data_dir": "/consul/data",
       "datacenter": {{.Values.Consul.Datacenter | quote }},
-      "key_file": "/etc/consul/tls/tls.key",
+      "key_file": "/consul/tls/tls.key",
       "addresses": {
         "http": "unix:///consul-unix-socket/consul-client.sock"
       },

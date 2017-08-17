@@ -60,7 +60,7 @@ spec:
         - name: config
           mountPath: /vault/config
         - name: tls
-          mountPath: /etc/vault/tls
+          mountPath: /vault/tls
         - name: ca-consul
           mountPath: /etc/vault/consul-ca
         {{- if .Values.Vault.AutoUnseal }}
@@ -115,15 +115,15 @@ spec:
               fieldPath: metadata.namespace
         volumeMounts:
         - name: consul-config
-          mountPath: /etc/consul/config
+          mountPath: /consul/config
         - name: tls-consul
-          mountPath: /etc/consul/tls
+          mountPath: /consul/tls
           readOnly: true
         - name: ca-consul
-          mountPath: /etc/consul/ca
+          mountPath: /consul/ca
           readOnly: true
-        - name: gossip-key
-          mountPath: /etc/consul/secrets
+        - name: gossip-json
+          mountPath: /consul/secrets
           readOnly: true
         - name: consul-unix-socket
           mountPath: /consul-unix-socket
@@ -131,32 +131,12 @@ spec:
           - "/bin/sh"
           - "-ec"
           - |
-            IP=$(hostname -i)
-
-            if [ -e /etc/consul/secrets/gossip-key ]; then
-              echo "{\"encrypt\": \"$(cat /etc/consul/secrets/gossip-key)\"}" > /etc/consul/encrypt.json
-              GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
-            fi
-
-            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
-                while true; do
-                    echo "Waiting for ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME} to come up"
-                    ping -W 1 -c 1 ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME}.${STATEFULSET_NAMESPACE}.svc.cluster.local > /dev/null && break
-                    sleep 1s
-                done
-            done
-
-            PEERS=""
-            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
-                PEERS="${PEERS}${PEERS:+ } -retry-join $(ping -c 1 ${STATEFULSET_NAME}-${i}.${STATEFULSET_NAME}.${STATEFULSET_NAMESPACE}.svc.cluster.local | awk -F'[()]' '/PING/{print $2}')"
-            done
-
             docker-entrypoint.sh \
               consul \
               agent \
-              -config-dir /etc/consul/config \
-              ${PEERS} \
-              ${GOSSIP_KEY}
+              -config-dir=/consul/config \
+              -config-dir=/consul/secrets \
+              -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
       volumes:
       - name: config
         configMap:
@@ -184,8 +164,8 @@ spec:
       - name: consul-config
         configMap:
           name: {{ template "fullname" . }}-{{.Values.Vault.ConsulClient.ComponentName}}
-      - name: gossip-key
+      - name: gossip-json
         secret:
-          secretName: {{ template "fullname" . }}-consul-gossip-key
+          secretName: {{ template "fullname" . }}-consul-gossip-json
       - name: consul-unix-socket
         emptyDir: {}

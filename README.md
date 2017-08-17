@@ -1,6 +1,11 @@
 # Vault
 
-This project sets up [Vault by Hashicorp](https://www.vaultproject.io/) on Kubernetes using Helm.  It create its own private Consul backend and secures the Consul and Vault traffic. Also, optionally, a Consul UI and Vault UI can be enabled.
+This project sets up [Vault by Hashicorp](https://www.vaultproject.io/) on Kubernetes using Helm in a HA configuration.  It create its own private Consul backend and secures the Consul and Vault traffic. Also, optionally, a Consul UI and Vault UI can be enabled.
+
+It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started/install.html) with Vault. There is also [charts](https://github.com/kubernetes/charts/tree/master/stable/consul) that will get Consul running in K8S. AWS has a solution if you want to use [CloudFormation templates](https://aws.amazon.com/quickstart/architecture/vault/). Putting this all together yourself in a secure way turns out to be much harder. This projects takes on a lot of the tasks that would normally be manual. From unsealing Vault to TLS creation for client and backend communication. Also automatically backing up the Consul data to AWS S3. The default setup will create 5 Consul replicas and 3 Vault replicas.
+
+##### Tech stack
+[Vault](https://www.vaultproject.io/), [Consul](https://www.consul.io/), [K8S](https://kubernetes.io/), [Helm](https://github.com/kubernetes/helm), [AWS S3](https://aws.amazon.com/s3/), Bash, OpenSSL, [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Let's Encrypt](https://letsencrypt.org/docs/)
 
 ### Contents
 <!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -112,7 +117,14 @@ With this setup, all network communication is encrypted with TLS.  See the figur
 
 ## Backup and recovery
 
-TBD
+Backups work by creating a Consul client coupled with [awscli](https://aws.amazon.com/cli/). The Consul client is configured to connect to the cluster and then `consul snapshot` is ran in a given interval "SleepDuration". This file is then uploaded to AWS S3 with the given base path "S3URL". The file is then removed and the process starts over again.
+
+To make the restoring process easy the Helm value was created "RestoreBackupFile". With that variable set `helm install` will pull down the snapshot and apply that to the cluster. NOTE: This variable only works for install and will not work for `helm upgrade`. This is a design feature to prevent restoring on top of a working Consul cluster. The following is an example of how you could use this setting:
+```bash
+helm install --values=values-prod.yaml --namespace=vault --name=vault-prod --set RestoreBackupFile=consul-20170815.065601.snap vault
+```
+
+At this time AWS S3 access is a assumed with AWS Roles given to the K8S cluster nodes. Future work might be done to pull from vault the needed access for it's own backups.
 
 ## Deleting Vault
 
