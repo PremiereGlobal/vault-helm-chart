@@ -24,10 +24,6 @@ spec:
       - name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
         image: "{{.Values.Consul.Backup.Image}}:{{.Values.Consul.Backup.ImageTag}}"
         imagePullPolicy: {{.Values.Consul.Backup.ImagePullPolicy}}
-        command:
-          - "/bin/sh"
-          - "-ce"
-          - "sleep 999999999"
         env:
         - name: "CONSUL_ARGS"
           value: -rejoin -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
