@@ -3,11 +3,11 @@ pipelines:
     group: vault
     label_template: "${git[:8]}"
     materials:
-      - git:
-          git: git@github.com:ReadyTalk/vault-helm-chart.git
-          branch: master
-      - gitBranches:
-          scm: 527fb0d8-c691-4693-a601-20a26ddd7d41
+      # - git:
+      #     git: git@github.com:ReadyTalk/vault-helm-chart.git
+      #     branch: master
+      gitBranches:
+        scm: 527fb0d8-c691-4693-a601-20a26ddd7d41
     stages:
       - helm-lint:
           clean_workspace: true
