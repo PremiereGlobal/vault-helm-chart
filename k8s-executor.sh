@@ -8,6 +8,7 @@ GO_PIPELINE_LABEL="${GO_PIPELINE_LABEL:-local}"
 GO_PIPELINE_NAME="${GO_PIPELINE_NAME:-"local"}"
 GO_STAGE_NAME="${GO_STAGE_NAME:-"local"}"
 GO_JOB_NAME="${GO_JOB_NAME:-"local"}"
+BRANCH_NAME="${GO_SCM_GITBRANCHES_CURRENT_BRANCH:-"local"}"
 SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # If running locally, use user's kubeconfig
@@ -32,6 +33,7 @@ docker run \
   -e "GO_PIPELINE_NAME=$GO_PIPELINE_NAME" \
   -e "GO_STAGE_NAME=$GO_STAGE_NAME" \
   -e "GO_JOB_NAME=$GO_JOB_NAME" \
+  -e "BRANCH_NAME=$BRANCH_NAME" \
   $KUBE_CONFIG_MOUNT \
   -v $SOURCE_DIR:/workdir \
   -w /workdir \

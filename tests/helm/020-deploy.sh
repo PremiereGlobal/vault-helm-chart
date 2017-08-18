@@ -10,7 +10,8 @@ kubectl label namespace $UNIQUE_NAME \
   trigger=$GO_TRIGGER_USER \
   pipeline=$GO_PIPELINE_NAME \
   stage-name=$GO_STAGE_NAME \
-  job-name=$GO_JOB_NAME
+  job-name=$GO_JOB_NAME \
+  branch-name=$BRANCH_NAME
 
 echo "Installing vault: $UNIQUE_NAME..."
 helm install \
