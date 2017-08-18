@@ -1,7 +1,7 @@
 pipelines:
   vault-deploy-test:
     group: vault
-    label_template: "${git[:8]}"
+    # label_template: "${git[:8]}"
     materials:
       # - git:
       #     git: git@github.com:ReadyTalk/vault-helm-chart.git
