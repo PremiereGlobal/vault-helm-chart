@@ -13,6 +13,8 @@ data:
   config.json : |
     {
       "server": false,
+      "datacenter": "{{.Values.Consul.Datacenter}}",
+      "retry_join": ["{{ template "fullname" . }}-{{.Values.Consul.ComponentName}}"],
       "bind_addr": "0.0.0.0",
       "ca_file": "/consul/ca/ca.crt.pem",
       "cert_file": "/consul/tls/tls.crt",

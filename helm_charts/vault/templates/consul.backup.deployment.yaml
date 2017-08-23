@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: {{.Values.Consul.Backup.ImagePullPolicy}}
         env:
         - name: "CONSUL_ARGS"
-          value: -rejoin -config-dir=/consul/config -config-dir=/consul/secrets -datacenter={{.Values.Consul.Datacenter}} -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+          value: -config-dir=/consul/config -config-dir=/consul/secrets
         - name: "S3_URL"
           value: {{.Values.Consul.Backup.S3URL}}/{{ .Release.Name }}/
         {{- if .Release.IsInstall }}
