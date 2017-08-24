@@ -9,7 +9,7 @@ if [ -n "$ALT_NAME_STRING" ]; then
   ALT_NAME_STRING=',"'$ALT_NAME_STRING'"'
 fi
 
-if "$ACME_ENVIRONMENT" == "production"; then
+if [ "$ACME_ENVIRONMENT" == "production" ]; then
   ACME_DIRECTORY_URL="https://acme-v01.api.letsencrypt.org/directory"
 else
   ACME_DIRECTORY_URL="https://acme-staging.api.letsencrypt.org/directory"

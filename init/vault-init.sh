@@ -7,7 +7,6 @@ fi
 
 RELEASE=$1
 NAMESPACE=$2
-FLAGS=${3:-""} # Primarily for -tls-skip-verify
 CHART_NAME="vault"
 COMPONENT="vault"
 
@@ -15,7 +14,7 @@ SECRET_NAME="$RELEASE-vault-keys"
 
 LABELS=$(kubectl get secret -l release=$RELEASE -n $NAMESPACE --show-labels | sed -n 2p | awk '{print $5}' | sed 's/\,/ /g')
 FIRST_VAULT_POD=$(kubectl get po -l component=$COMPONENT,release=$RELEASE -n $NAMESPACE | awk '{if(NR==2)print $1}')
-INIT_MESSAGE=$(kubectl exec -n $NAMESPACE -c $RELEASE-$CHART_NAME-$COMPONENT $FIRST_VAULT_POD -- sh -c "vault init $FLAGS" 2>&1)
+INIT_MESSAGE=$(kubectl exec -n $NAMESPACE -c $RELEASE-$CHART_NAME-$COMPONENT $FIRST_VAULT_POD -- sh -c "vault init --tls-skip-verify" 2>&1)
 
 echo "$INIT_MESSAGE"
 if [[ ${INIT_MESSAGE} != *"Error initializing Vault"*  ]]; then

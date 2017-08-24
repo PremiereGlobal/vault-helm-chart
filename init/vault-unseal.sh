@@ -7,7 +7,6 @@ fi
 
 RELEASE=$1
 NAMESPACE=$2
-FLAGS=${3:-""} # Primarily for -tls-skip-verify
 COMPONENT="vault"
 REQUIRED_KEY_COUNT=3
 
@@ -19,5 +18,5 @@ do
   KEY=$(echo "$UNSEAL_KEYS"  | sed "${i}q;d" | base64 --decode)
   kubectl get po -l component=$COMPONENT,release=$RELEASE -n $NAMESPACE \
       | awk '{if(NR>1)print $1}' \
-      | xargs -I % kubectl exec -n $NAMESPACE -c $RELEASE-vault-$COMPONENT % -- sh -c "vault unseal $FLAGS $KEY";
+      | xargs -I % kubectl exec -n $NAMESPACE -c $RELEASE-vault-$COMPONENT % -- sh -c "vault unseal --tls-skip-verify $KEY";
 done
