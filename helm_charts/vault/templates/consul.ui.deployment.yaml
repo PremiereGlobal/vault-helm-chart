@@ -33,7 +33,7 @@ spec:
               agent \
               -config-dir=/consul/config \
               -config-dir=/consul/secrets \
-              retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
+              -retry-join={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
         env:
           - name: INITIAL_CLUSTER_SIZE
             value: {{ .Values.Consul.Replicas | quote }}
