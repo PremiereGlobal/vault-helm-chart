@@ -29,6 +29,8 @@ spec:
           value: -config-dir=/consul/config -config-dir=/consul/secrets
         - name: "S3_URL"
           value: {{.Values.Consul.Backup.S3URL}}/{{ .Release.Name }}/
+        - name: "SLEEP_DURATION"
+          value: {{.Values.Consul.Backup.SleepDuration | quote}}
         {{- if .Release.IsInstall }}
         lifecycle:
           postStart:
