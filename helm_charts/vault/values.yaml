@@ -40,6 +40,9 @@ Consul:
     Memory: "200Mi"
     S3URL: "s3://<backup-bucket>" # {{ .Release.Name }} will get added to the end
     SleepDuration: 1800 # 30mins
+  Restore:
+    ComponentName: "restore"
+    RestoreReleaseName: "" # This is the release name of the backup
     RestoreBackupFile: "" # This is the file to restore on install
 Vault:
   ComponentName: "vault"

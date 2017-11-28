@@ -1,41 +1,40 @@
-{{- if .Values.Consul.Backup.Enabled }}
-apiVersion: extensions/v1beta1
-kind: Deployment
+{{- if .Values.Consul.Restore.RestoreBackupFile }}
+{{- if .Release.IsInstall }}
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+  name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
   labels:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    component: {{.Values.Consul.Backup.ComponentName}}
+    component: {{.Values.Consul.Restore.ComponentName}}
     app: {{ template "name" . }}
 spec:
-  replicas: {{ .Values.Consul.Backup.Replicas }}
   template:
     metadata:
       labels:
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-        component: {{.Values.Consul.Backup.ComponentName}}
+        component: {{.Values.Consul.Restore.ComponentName}}
         app: {{ template "name" . }}
     spec:
+      restartPolicy: OnFailure
       containers:
-      - name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+      - name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
         image: "{{.Values.Consul.Backup.Image}}:{{.Values.Consul.Backup.ImageTag}}"
         imagePullPolicy: {{.Values.Consul.Backup.ImagePullPolicy}}
         env:
         - name: "CONSUL_ARGS"
           value: -config-dir=/consul/config -config-dir=/consul/secrets
         - name: "S3_URL"
-          value: {{.Values.Consul.Backup.S3URL}}/{{ .Release.Name }}/
-        resources:
-          limits:
-            cpu: {{ .Values.Consul.Backup.Cpu }}
-            memory: {{ .Values.Consul.Backup.Memory }}
-          requests:
-            cpu: {{ .Values.Consul.Backup.Cpu }}
-            memory: {{ .Values.Consul.Backup.Memory }}
+          value: {{.Values.Consul.Backup.S3URL}}/{{ .Values.Consul.Restore.RestoreReleaseName }}/
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |
+            /init.sh {{.Values.Consul.Restore.RestoreBackupFile}}
         volumeMounts:
         - name: consul-config
           mountPath: /consul/config
@@ -68,4 +67,5 @@ spec:
       - name: gossip-key
         secret:
           secretName: {{ template "fullname" . }}-consul-gossip-json
+{{- end }}
 {{- end }}
