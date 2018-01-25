@@ -47,7 +47,7 @@ Vault:
   HttpPort: 8200
   HaForwardingPort: 8201
   Image: "vault"
-  ImageTag: "0.7.3"
+  ImageTag: "0.9.0"
   ImagePullPolicy: "IfNotPresent"
   Debug: "false"
   Replicas: 3
