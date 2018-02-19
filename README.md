@@ -84,6 +84,26 @@ Certain components cannot be upgraded simply with a `helm upgrade`, primarily, a
 
 >Also if the Consul stateful set it being modified, it must be updated with a rolling restart *-process TBD--*.
 
+## Renewing Vault Certificate (TLS Secret)
+
+* Step 1: Connect to the correct kubernetes cluster
+* Step 2: Generate new certificate using appropriate tool
+* Step 3: Combine new certificate and intermediate certificate, in that order, into bundle file
+* Step 4: Update kubernetes tls secret
+
+```bash
+# one liner to update kubernetes tls secret (cert and key):
+kubectl create secret tls \
+  --cert="/path/to/combined/cert.bundle" \
+  --key="/path/to/private.key" \
+  <name of secret>.tls --dry-run -o yaml | kubectl apply -f -
+# deploy by destroying one vault pod at a time
+kubectl delete po/<name of pod>
+# monitor for changes to certificate date as pods recreate
+watch -n1 "echo | openssl s_client -connect vault.example.com:8200 2>/dev/null | openssl x509 -noout -dates"
+```
+
+
 ## Testing Vault
 
 Installation Variations
