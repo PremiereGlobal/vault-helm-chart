@@ -29,6 +29,114 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 * LetsEncrypt Account and Route53 access (optional)
 * Amazon S3 access (optiona, for backups)
 
+### Configuration
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `Consul.ComponentName`                  | Used for resource names and labeling               | `consul`                                                   |
+| `Consul.Cpu`                   | container requested cpu               | `100m`                                                     |
+| `Consul.Datacenter`         | Consul datacenter name          | `dc1`                                                     |
+| `Consul.Image`                 | Container image name                  | `consul`                                                   |
+| `Consul.ImageTag`              | Container image tag                   | `0.9.0`                                                   |
+| `Consul.ImagePullPolicy`       | Container pull policy                 | `IfNotPresent`                                                   |
+| `Consul.Memory`                | container requested memory            | `512Mi`                                                    |
+| `Consul.Replicas`         | Container replicas          | `5`                                                     |
+| `Consul.HttpPort`              | Consul http listening port            | `8500`                                                     |
+| `Consul.SerflanPort`           | Container serf lan listening port     | `8301`                                                     |
+| `Consul.SerflanUdpPort`        | Container serf lan UDP listening port | `8301`                                                     |
+| `Consul.SerfwanPort`           | Container serf wan listening port     | `8302`                                                     |
+| `Consul.SerfwanUdpPort`        | Container serf wan UDP listening port | `8302`                                                     |
+| `Consul.ServerPort`            | Container server listening port       | `8300`                                                     |
+| `Consul.ConsulDnsPort`         | Container dns listening port          | `8600`                                                     |
+| `Consul.PreInstall.ComponentName`         | Used for resource names and labeling          | `consul-preinstall`                                                     |
+| `Consul.PreInstall.JobDeadline`         | Timeout for Consul pre-install job (seconds)          | `30`                                                     |
+| `Consul.PreInstall.Tls.CountryName`         | TLS cert country name          | ``                                                     |
+| `Consul.PreInstall.Tls.LocalityName`         | TLS cert locality name          | ``                                                     |
+| `Consul.PreInstall.Tls.EmailAddress`         | TLS cert email address          | ``                                                     |
+| `Consul.PreInstall.Tls.OrganizationName`         | TLS cert organization name          | ``                                                     |
+| `Consul.PreInstall.Tls.StateOrProvinceName`         | TLS cert state         | ``                                                     |
+| `Consul.PreInstall.Tls.OrganizationUnitName`         | TLS cert organization unit name          | ``                                                     |
+| `Consul.Ui.ComponentName`         | Used for resource names and labeling          | `consul-ui`                                                     |
+| `Consul.Ui.Enabled`         | Enable the Consul Web UI          | `false`                                                     |
+| `Consul.Ui.Host`         | Host name to respond to (for ingress)          | `localhost`                                                     |
+| `Consul.Ui.AlternateServerNames`         | Alternate host names to respond to (for ingress)          | `127.0.0.1`                                                     |
+
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `Consul.ComponentName` | Used for resource names and labeling | `consul` |
+| `Consul.Cpu` | Consul container requested cpu | `100m` |
+| `Consul.Datacenter` | Consul datacenter name | `dc1` |
+| `Consul.Image` | Consul container image name | `consul` |
+| `Consul.ImageTag` | Consul container image tag | `0.9.2` |
+| `Consul.ImagePullPolicy` | Consul container pull policy | `IfNotPresent` |
+| `Consul.Memory` | Consul container requested memory | `256Mi` |
+| `Consul.Replicas` | Consul container replicas | `5` |
+| `Consul.HttpPort` | Consul http listening port | `8500` |
+| `Consul.SerflanPort` | Consul serf lan listening port | `8301` |
+| `Consul.SerflanUdpPort` | Consul serf lan UDP listening port | `8301` |
+| `Consul.SerfwanPort` | Consul serf wan listening port | `8302` |
+| `Consul.SerfwanUdpPort` | Consul serf wan UDP listening port | `8302` |
+| `Consul.ServerPort` | Consul server listening port | `8300` |
+| `Consul.ConsulDnsPort` | Consul DNS listening port | `8600` |
+| `Consul.PreInstall.ComponentName` | Used for resource names and labeling  | `consul-preinstall` |
+| `Consul.PreInstall.JobDeadline` | Timeout for Consul pre-install job (seconds) | `30` |
+| `Consul.PreInstall.Tls.CountryName` | TLS cert country name | `US` |
+| `Consul.PreInstall.Tls.LocalityName` | TLS cert locality name | `placeholder` |
+| `Consul.PreInstall.Tls.EmailAddress` | TLS cert email address | `placeholder@placeholder.com` |
+| `Consul.PreInstall.Tls.OrganizationName` | TLS cert organization name | `placeholder` |
+| `Consul.PreInstall.Tls.StateOrProvinceName` | TLS cert state | `CO` |
+| `Consul.PreInstall.Tls.OrganizationUnitName` | TLS cert organization unit name | `placeholder` |
+| `Consul.Ui.ComponentName` | Used for resource names and labeling  | `consul-ui` |
+| `Consul.Ui.Enabled` | Enable the Consul Web UI | `false` |
+| `Consul.Ui.Host` | Consul UI ingress hostname | `localhost` |
+| `Consul.Ui.AlternateServerNames` | Consul UI ingress alternative hostnames (comma separated) | `127.0.0.1` |
+| `Consul.Backup.Enabled` | Consul backups enabled | `false` |
+| `Consul.Backup.ComponentName` | Used for resource names and labeling | `backup` |
+| `Consul.Backup.Replicas` | Consul backup container replicas | `1` |
+| `Consul.Backup.ImagePullPolicy` | Consul backup container pull policy | `Always` |
+| `Consul.Backup.Image` | Consul backup container image name | `thorix/consul-backup` |
+| `Consul.Backup.ImageTag` | Consul backup container image tag | `latest` |
+| `Consul.Backup.Cpu` | Consul backup requested cpu | `512m` |
+| `Consul.Backup.Memory` | Consul backup container requested memory | `200Mi` |
+| `Consul.Backup.S3URL` | Consul backups S3 bucket path, e.g `s3://my-bucket` (helm `.Release.Name` will get added to the end) |  |
+| `Consul.Backup.SleepDuration` | Backup interval (in seconds) | `7200` |
+| `Consul.Restore.ComponentName` | Used for resource names and labeling | `restore` |
+| `Consul.Restore.S3URL` | Full restore S3 bucket path, e.g. `s3://my-bucket/vault-a/` |  |
+| `Consul.Restore.RestoreFile` | Filename in s3 to restore from, this field triggers the restore option |  |
+| `Consul.Restore.AwsAccessKeyId` | AWS key with access to the restore s3 location |  |
+| `Consul.Restore.AwsSecretAccessKey` | AWS secret key with access to the restore s3 location | |
+| `Vault.ComponentName` | Used for resource names and labeling | `vault` |
+| `Vault.AutoUnseal` | Vault auto-unsealing (deprecated) | `false` |
+| `Vault.HttpPort` | Vault http listening port | `8200` |
+| `Vault.HaForwardingPort` | Vault high-availability port-forwarding port | `8201` |
+| `Vault.Image` | Vault container image name | `vault` |
+| `Vault.ImageTag` | Vault container image tag | `0.9.0` |
+| `Vault.ImagePullPolicy` | Vault container pull policy | `IfNotPresent`
+| `Vault.Debug` | Enable debug log level | `false` |
+| `Vault.Replicas` | Vault container replicas | `3` |
+| `Vault.Cpu` | Vault container requested cpu | `512m` |
+| `Vault.Memory` | Vault container requested memory | `200Mi` |
+| `Vault.DisableConsulRegistration` | [Disable Vault registration within Consul ](https://www.vaultproject.io/docs/configuration/storage/consul.html#disable_registration) | `false` |
+| `Vault.DefaultLeaseTtl` | Default lease TTL for Vault tokens | `768h` |
+| `Vault.MaxLeaseTtl` | Max lease TTL for Vault tokens | `768h` |
+| `Vault.ConsulClient.ComponentName` | Used for resource names and labeling | `consul-client` |
+| `Vault.PreInstall.ComponentName` | Used for resource names and labeling | `vault-preinstall` |
+| `Vault.PreInstall.JobDeadline` | Timeout for Vault pre-install job(s) (seconds)  | `100`
+| `Vault.Tls.ServerName` | Vault TLS/ingress hostname | `vault.consul` |
+| `Vault.Tls.AlternateServerNames` | Vault TLS/ingress alternative hostnames (comma separated) | `vault-alt.consul`
+| `Vault.Tls.LetsEncrypt.Enabled` | Enable LetsEncrypt support | `false` |
+| `Vault.Tls.LetsEncrypt.Environment` | LetsEncrypt environment (production/stage) | `stage` |
+| `Vault.Tls.LetsEncrypt.AcmeAccountKey` | LetsEncrypt registration key location (s3 bucket), e.g. `s3://my-bucket/stage.pem` | |
+| `Vault.Ui.ComponentName` | Used for resource names and labeling | `vault-ui` |
+| `Vault.Ui.Enabled` | Enable Vault UI | `false` |
+| `Vault.Ui.Host` | Vault UI ingress hostname | `localhost` |
+| `Vault.Ui.AlternateServerNames` | Vault UI ingress alternative hostnames (comma separated) | `127.0.0.1` |
+| `Vault.Ui.Image` | Vault UI container image name | `djenriquez/vault-ui` |
+| `Vault.Ui.ImageTag` | Vault UI container image tag | `2.2.0` |
+| `Vault.Ui.ImagePullPolicy` | Vault UI container pull policy | `Always` |
+| `Vault.Ui.Replicas` | Vault UI container replicas | `1` |
+| `Vault.Ui.HttpPort` | Vault UI http listening port | `8000` |
+
 ### Helm Install
 To install the chart with the release name `vault-prod` in namespace `vault` with the `values-prod` configuration (see [helm_charts/vault](helm_charts/vault) for values definitions):
 
@@ -137,14 +245,37 @@ With this setup, all network communication is encrypted with TLS.  See the figur
 
 ## Backup and recovery
 
-Backups work by creating a Consul client coupled with [awscli](https://aws.amazon.com/cli/). The Consul client is configured to connect to the cluster and then `consul snapshot` is ran in a given interval "SleepDuration". This file is then uploaded to AWS S3 with the given base path "S3URL". The file is then removed and the process starts over again.
+This Helm chart has a built-in backup/restore option which can be used to take snapshots of the Vault's encrypted backend data (from Consul) and restore it in the case of a full Consul failure.
 
-To make the restoring process easy the Helm value was created "RestoreBackupFile". With that variable set `helm install` will pull down the snapshot and apply that to the cluster. NOTE: This variable only works for install and will not work for `helm upgrade`. This is a design feature to prevent restoring on top of a working Consul cluster. The following is an example of how you could use this setting:
+### Backing up Vault
+
+Backups can be enabled and configured with the `Consul.Backup.*` option values. Backups work by taking a periodic [snapshot of Consul](https://www.consul.io/docs/commands/snapshot.html) and shipping those snapshots to an S3 bucket.
+
+> **Note**: At this time AWS S3 access for backups is a assumed with AWS Roles given to the K8S cluster nodes. Future work might be done to pull from vault the needed access for it's own backups.
+
+### Restoring from Backup
+
+> **Warning**: The restore process will create an exact restore of your Vault instance at the point of the snapshot.  This means that any leases that have expired since the backup was taken will be immediately revoked. It will have no knowledge of lease renewals that happened after the snapshot and therefore could unexpectedly revoke external leases (AWS, MySQL, etc).  Take extreme caution when performing a restore from a production backup!
+
+> **Note**: When doing a restore, ensure that the Consul and Vault versions are compatible with version used to create the snapshot file.
+
+A restore can be configured with the `Consul.Restore.*` option values.  The restore process uses a Kubernetes job to perform a [`consul snapshot restore`](https://www.consul.io/docs/commands/snapshot/restore.html) based on a provided snapshot file stored in AWS S3. A set of AWS credentials are required to be passed in to permform this action. With all the restore variables set `helm install` will pull down the snapshot and apply that to the cluster. The following is an example of how you could install vault using a backup file:
+
+> **Important Notes**: The restore process will only work on a fresh install of the helm chart.  Doing a `helm upgrade` will not envoke the restore option(s). This is a design feature to prevent restoring on top of a working Consul cluster.
+
+For the restore option, specific AWS credentials with access to s3 must be provided.
+
 ```bash
-helm install --values=values-prod.yaml --namespace=vault --name=vault-prod --set RestoreBackupFile=consul-20170815.065601.snap vault
+helm install \
+  --values=values-prod.yaml \
+  --namespace=vault \
+  --name=vault-prod \
+  --set Consul.Restore.S3URL=s3://vault-backups/prod/ \
+  --set Consul.Restore.RestoreFile=consul-20180101.171653.snap \
+  --set Consul.Restore.AwsAccessKeyId=xxxxxxxxxx \
+  --set Consul.Restore.AwsSecretAccessKey=xxxxxxxxxx \
+  vault
 ```
-
-At this time AWS S3 access is a assumed with AWS Roles given to the K8S cluster nodes. Future work might be done to pull from vault the needed access for it's own backups.
 
 ## Deleting Vault
 
@@ -155,7 +286,7 @@ helm delete vault-prod --purge
 
 Also, due to the way helm does pre-installs and the way the vault/consul secrets are generated, you'll need to clean up these extra resources by running the following command:
 ```bash
-kubectl delete po,jobs,cm,secrets -l 'component in (consul-preinstall,vault-preinstall),release=vault-prod' -n vault
+kubectl delete po,jobs,cm,secrets -l 'component in (consul-preinstall,vault-preinstall,unseal-keys),release=vault-prod' -n vault
 ```
 
 Lastly, the ingress controller creates a configmap that needs to be cleaned up as well.

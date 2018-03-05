@@ -6,7 +6,7 @@ CHART=$(grep "chart=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 COMPONENT=$(grep "component=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 APP=$(grep "app=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 
-kubectl delete secrets -l release=$RELEASE compontent=$COMPONENT
+kubectl delete secrets -l release=$RELEASE,compontent=$COMPONENT
 
 # Create K8s Secret for Consul Gossip Key in a json format so it can be mounted
 # It seems that k8s doesn't like to use JSON with --from-literal=
@@ -48,4 +48,3 @@ kubectl label secret \
   chart=$CHART \
   component=$COMPONENT \
   app=$APP
-
