@@ -27,8 +27,8 @@ spec:
           - "docker-entrypoint.sh"
           - "server"
         env:
-        - name: "VAULT_DEBUG"
-          value: "{{.Values.Vault.Debug}}"
+        - name: "VAULT_LOG_LEVEL"
+          value: "{{.Values.Vault.LogLevel}}"
         - name: "VAULT_TLS_SERVER_NAME"
           value: "{{.Values.Vault.Tls.ServerName}}"
         {{- if .Values.Vault.AutoUnseal }}
@@ -43,12 +43,10 @@ spec:
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
         readinessProbe:
-          exec:
-            command:
-              - "/bin/sh"
-              - "-ec"
-              - |
-                vault status {{ template "tls_skip_verify" . }} | grep "Sealed: false"
+          httpGet:
+            scheme: HTTPS
+            path: /v1/sys/health?standbyok
+            port: {{.Values.Vault.HttpPort}}
           initialDelaySeconds: 5
           periodSeconds: 5
         ports:

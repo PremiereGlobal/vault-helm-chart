@@ -59,9 +59,9 @@ Vault:
   HttpPort: 8200
   HaForwardingPort: 8201
   Image: "vault"
-  ImageTag: "0.9.0"
+  ImageTag: "0.9.5"
   ImagePullPolicy: "IfNotPresent"
-  Debug: "false"
+  LogLevel: "info"
   Replicas: 3
   Cpu: "512m"
   Memory: "200Mi"
