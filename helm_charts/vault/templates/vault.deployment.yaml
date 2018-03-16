@@ -19,6 +19,16 @@ spec:
         component: {{.Values.Vault.ComponentName}}
         app: {{ template "name" . }}
     spec:
+      {{- if .Values.Vault.HostAliases }}
+      hostAliases:
+      {{- range .Values.Vault.HostAliases }}
+      - ip: {{ .ip }}
+        hostnames:
+        {{- range .hostnames }}
+        - {{ . }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
       containers:
       - name: {{ template "fullname" . }}-{{.Values.Vault.ComponentName}}
         image: "{{.Values.Vault.Image}}:{{.Values.Vault.ImageTag}}"
@@ -71,6 +81,11 @@ spec:
         {{- end }}
         - name: consul-unix-socket
           mountPath: /consul-unix-socket
+        {{- if .Values.Vault.HostAliases }}
+        - name: nsswitch
+          mountPath: /etc/nsswitch.conf
+          subPath: nsswitch.conf
+        {{- end }}          
         resources:
           limits:
             cpu: {{ .Values.Vault.Cpu }}
@@ -169,3 +184,11 @@ spec:
           secretName: {{ template "fullname" . }}-consul-gossip-json
       - name: consul-unix-socket
         emptyDir: {}
+      {{- if .Values.Vault.HostAliases }}
+      - name: nsswitch
+        configMap:
+          name: {{ template "fullname" . }}-{{.Values.Vault.ComponentName}}
+          items:
+          - key: nsswitch.conf
+            path: nsswitch.conf
+      {{- end }}

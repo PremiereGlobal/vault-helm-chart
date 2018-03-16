@@ -47,6 +47,10 @@ Vault:
   HttpPort: 8200
   HaForwardingPort: 8201
   Image: "vault"
+  # HostAliases:
+  #   ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"
   ImageTag: "0.9.0"
   ImagePullPolicy: "IfNotPresent"
   Debug: "false"

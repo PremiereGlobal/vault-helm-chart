@@ -162,6 +162,14 @@ Lastly, the ingress controller creates a configmap that needs to be cleaned up a
 ```
 kubectl delete cm ingress-controller-leader-nginx -n vault
 ```
+## Troubleshooting
+
+### Querying Consul
+
+```
+consul members -client-cert /consul/tls/tls.crt -client-key /consul/tls/tls.key -ca-file /consul/ca/ca.crt.pem -http-addr https://localhost:8500 -tl
+s-server-name server.<datacenter>.consul
+```
 
 ## Future Work
 

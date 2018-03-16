@@ -24,5 +24,9 @@ data:
     disable_mlock = false
     default_lease_ttl = "{{.Values.Vault.DefaultLeaseTtl}}"
     max_lease_ttl = "{{.Values.Vault.MaxLeaseTtl}}"
+  {{- if .Values.Vault.HostAliases }}
+  nsswitch.conf: |
+    hosts:          files mdns4_minimal [NOTFOUND=return] dns
+  {{- end }}
 
 # disable_mlock - set to false to disable memory from being swapped to disk
