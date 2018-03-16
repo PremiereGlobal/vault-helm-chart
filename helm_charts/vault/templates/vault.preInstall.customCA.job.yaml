@@ -1,4 +1,4 @@
-{{- if (not .Values.Vault.Tls.LetsEncrypt.Enabled) }}
+{{- if and (not .Values.Vault.Tls.LetsEncrypt.Enabled) (not .Values.Vault.Tls.CertString) }}
 apiVersion: batch/v1
 kind: Job
 metadata:

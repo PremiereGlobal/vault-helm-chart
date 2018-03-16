@@ -124,14 +124,16 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.PreInstall.ComponentName` | Used for resource names and labeling | `vault-preinstall` |
 | `Vault.PreInstall.JobDeadline` | Timeout for Vault pre-install job(s) (seconds)  | `100`
 | `Vault.Tls.ServerName` | Vault TLS/ingress hostname | `vault.consul` |
-| `Vault.Tls.AlternateServerNames` | Vault TLS/ingress alternative hostnames (comma separated) | `vault-alt.consul`
+| `Vault.Tls.AlternateServerNames` | Vault TLS/ingress alternative hostnames (comma separated) | `vault-alt.consul` |
+| `Vault.Tls.CertString` | Provide a TLS certificate file to use in Vault's listener |  |
+| `Vault.Tls.KeyString` | Provide a TLS certificate key file to use in Vault's listener |  |
 | `Vault.Tls.LetsEncrypt.Enabled` | Enable LetsEncrypt support | `false` |
 | `Vault.Tls.LetsEncrypt.Environment` | LetsEncrypt environment (production/stage) | `stage` |
 | `Vault.Tls.LetsEncrypt.AcmeAccountKey` | LetsEncrypt registration key location (s3 bucket), e.g. `s3://my-bucket/stage.pem` | |
 | `Vault.Ui.ComponentName` | Used for resource names and labeling | `vault-ui` |
 | `Vault.Ui.Enabled` | Enable Vault UI | `false` |
 | `Vault.Ui.Host` | Vault UI ingress hostname | `localhost` |
-| `Vault.Ui.AlternateServerNames` | Vault UI ingress alternative hostnames (comma separated) | `127.0.0.1` |
+| `Vault.Ui.AlternateServerNames` | Vault UI ingress alternative hostnames (comma separated) |  |
 | `Vault.Ui.Image` | Vault UI container image name | `djenriquez/vault-ui` |
 | `Vault.Ui.ImageTag` | Vault UI container image tag | `2.2.0` |
 | `Vault.Ui.ImagePullPolicy` | Vault UI container pull policy | `Always` |
