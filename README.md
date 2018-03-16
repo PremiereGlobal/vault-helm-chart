@@ -116,6 +116,7 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Replicas` | Vault container replicas | `3` |
 | `Vault.Cpu` | Vault container requested cpu | `512m` |
 | `Vault.Memory` | Vault container requested memory | `200Mi` |
+| `Vault.HostAliases` | List of hostfile entries, see [docs](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) for details and format |  |
 | `Vault.DisableConsulRegistration` | [Disable Vault registration within Consul ](https://www.vaultproject.io/docs/configuration/storage/consul.html#disable_registration) | `false` |
 | `Vault.DefaultLeaseTtl` | Default lease TTL for Vault tokens | `768h` |
 | `Vault.MaxLeaseTtl` | Max lease TTL for Vault tokens | `768h` |

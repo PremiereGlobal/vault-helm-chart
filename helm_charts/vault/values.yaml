@@ -59,16 +59,16 @@ Vault:
   HttpPort: 8200
   HaForwardingPort: 8201
   Image: "vault"
-  # HostAliases:
-  #   ip: "127.0.0.1"
-  #   hostnames:
-  #   - "foo.local"
   ImageTag: "0.9.0"
   ImagePullPolicy: "IfNotPresent"
   Debug: "false"
   Replicas: 3
   Cpu: "512m"
   Memory: "200Mi"
+  # HostAliases:
+  # - ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"  
   DisableConsulRegistration: "false"
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"
