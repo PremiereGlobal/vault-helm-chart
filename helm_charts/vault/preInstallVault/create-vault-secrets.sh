@@ -21,15 +21,3 @@ kubectl label secret \
   chart=$CHART \
   component=$COMPONENT \
   app=$APP
-
-# Create k8s Secret for Vault Keys (w/ placeholder data)
-kubectl create secret generic \
-  $FULL_NAME-keys \
-  --from-literal=placeholder=foo
-kubectl label secret \
-  $FULL_NAME-keys \
-  heritage=$HERITAGE \
-  release=$RELEASE \
-  chart=$CHART \
-  component=$COMPONENT \
-  app=$APP

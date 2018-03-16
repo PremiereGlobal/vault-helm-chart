@@ -1,43 +1,46 @@
-{{- if .Values.Consul.Backup.Enabled }}
-apiVersion: extensions/v1beta1
-kind: Deployment
+{{- if .Release.IsInstall }}
+{{- if .Values.Consul.Restore.RestoreFile }}
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+  name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
   labels:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    component: {{.Values.Consul.Backup.ComponentName}}
+    component: {{.Values.Consul.Restore.ComponentName}}
     app: {{ template "name" . }}
 spec:
-  replicas: {{ .Values.Consul.Backup.Replicas }}
+  activeDeadlineSeconds: 100
   template:
     metadata:
+      name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
       labels:
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-        component: {{.Values.Consul.Backup.ComponentName}}
+        component: {{.Values.Consul.Restore.ComponentName}}
         app: {{ template "name" . }}
     spec:
+      restartPolicy: Never
       containers:
-      - name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+      - name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
         image: "{{.Values.Consul.Backup.Image}}:{{.Values.Consul.Backup.ImageTag}}"
         imagePullPolicy: {{.Values.Consul.Backup.ImagePullPolicy}}
         env:
         - name: "CONSUL_ARGS"
           value: -config-dir=/consul/config -config-dir=/consul/secrets
         - name: "S3_URL"
-          value: {{.Values.Consul.Backup.S3URL}}/
-        - name: "SLEEP_DURATION"
-          value: {{.Values.Consul.Backup.SleepDuration | quote}}
-        resources:
-          limits:
-            cpu: {{ .Values.Consul.Backup.Cpu }}
-            memory: {{ .Values.Consul.Backup.Memory }}
-          requests:
-            cpu: {{ .Values.Consul.Backup.Cpu }}
-            memory: {{ .Values.Consul.Backup.Memory }}
+          value: {{.Values.Consul.Restore.S3URL}}
+        - name: "AWS_ACCESS_KEY_ID"
+          value: "{{.Values.Consul.Restore.AwsAccessKeyId}}"
+        - name: "AWS_SECRET_ACCESS_KEY"
+          value: "{{.Values.Consul.Restore.AwsSecretAccessKey}}"
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |
+            /init.sh {{.Values.Consul.Restore.RestoreFile}}
         volumeMounts:
         - name: consul-config
           mountPath: /consul/config
@@ -54,7 +57,7 @@ spec:
       volumes:
       - name: consul-config
         configMap:
-          name: {{ template "fullname" . }}-{{.Values.Consul.Backup.ComponentName}}
+          name: {{ template "fullname" . }}-{{.Values.Consul.Restore.ComponentName}}
           items:
           - key: config.json
             path: config.json
@@ -70,4 +73,5 @@ spec:
       - name: gossip-key
         secret:
           secretName: {{ template "fullname" . }}-consul-gossip-json
+{{- end }}
 {{- end }}

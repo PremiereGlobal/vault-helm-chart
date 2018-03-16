@@ -1,3 +1,7 @@
+# Default values for Vault.
+# This is a YAML-formatted file.
+
+# Consul storage backend configuration
 Consul:
   ComponentName: "consul"
   Cpu: "100m"
@@ -38,9 +42,17 @@ Consul:
     ImageTag: "latest"
     Cpu: "512m"
     Memory: "200Mi"
-    S3URL: "s3://<backup-bucket>" # {{ .Release.Name }} will get added to the end
+    S3URL: "" # {{ .Release.Name }} will get added to the end
     SleepDuration: 7200 # 2 hours
-    RestoreBackupFile: "" # This is the file to restore on install
+
+  Restore:
+    ComponentName: "restore"
+    S3URL: ""
+    RestoreFile: "" # file name to restore from s3
+    AwsAccessKeyId: ""
+    AwsSecretAccessKey: ""
+
+# Vault server configuration
 Vault:
   ComponentName: "vault"
   AutoUnseal: false
