@@ -58,6 +58,9 @@ Vault:
   AutoUnseal: false
   HttpPort: 8200
   HaForwardingPort: 8201
+  Ingress:
+    Enabled: true # If enabled, will use service type ClusterIP
+  NodePort: 30825 # Ignored if Ingress.Enabled = true
   Image: "vault"
   ImageTag: "0.9.0"
   ImagePullPolicy: "IfNotPresent"
