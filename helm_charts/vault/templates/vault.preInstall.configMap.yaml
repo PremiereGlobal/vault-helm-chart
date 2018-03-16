@@ -1,3 +1,4 @@
+{{- if .Values.Vault.Tls.LetsEncrypt.Enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,3 +16,4 @@ metadata:
     "helm.sh/hook-weight": "50"
 data:
 {{ (.Files.Glob "preInstallVault/*").AsConfig | indent 2 }}
+{{- end }}

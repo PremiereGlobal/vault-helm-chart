@@ -76,6 +76,8 @@ Vault:
   Tls:
     ServerName: "vault.consul"
     AlternateServerNames: "vault-alt.consul" # Comma separated
+    CertString: ""
+    KeyString: ""
     LetsEncrypt:
       Enabled: false
       Environment: "stage" # production/stage
@@ -84,7 +86,7 @@ Vault:
     ComponentName: "vault-ui"
     Enabled: false
     Host: "localhost"
-    AlternateServerNames: "127.0.0.1" # Comma separated
+    AlternateServerNames: "" # Comma separated
     Image: "djenriquez/vault-ui"
     ImageTag: "2.2.0"
     ImagePullPolicy: "Always"
