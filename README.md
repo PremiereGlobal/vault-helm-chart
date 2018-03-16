@@ -109,6 +109,8 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.AutoUnseal` | Vault auto-unsealing (deprecated) | `false` |
 | `Vault.HttpPort` | Vault http listening port | `8200` |
 | `Vault.HaForwardingPort` | Vault high-availability port-forwarding port | `8201` |
+| `Vault.Ingress.Enabled` | Enable ingress. If enabled, will use service type ClusterIP | `true` |
+| `Vault.NodePort` | Vault service NodePort to open. Ignored if Ingress.Enabled = true  | `30825` |
 | `Vault.Image` | Vault container image name | `vault` |
 | `Vault.ImageTag` | Vault container image tag | `0.9.0` |
 | `Vault.ImagePullPolicy` | Vault container pull policy | `IfNotPresent`
