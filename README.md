@@ -112,7 +112,7 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Image` | Vault container image name | `vault` |
 | `Vault.ImageTag` | Vault container image tag | `0.9.0` |
 | `Vault.ImagePullPolicy` | Vault container pull policy | `IfNotPresent`
-| `Vault.Debug` | Enable debug log level | `false` |
+| `Vault.LogLevel` | Set vault log level (trace, debug, info, etc.) | `false` |
 | `Vault.Replicas` | Vault container replicas | `3` |
 | `Vault.Cpu` | Vault container requested cpu | `512m` |
 | `Vault.Memory` | Vault container requested memory | `200Mi` |
