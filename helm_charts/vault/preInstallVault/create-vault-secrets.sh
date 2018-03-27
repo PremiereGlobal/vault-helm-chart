@@ -6,7 +6,7 @@ CHART=$(grep "chart=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 COMPONENT=$(grep "component=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 APP=$(grep "app=" /etc/podinfo/labels | sed 's/^.*="\(.*\)"$/\1/')
 
-kubectl delete secrets -l release=$RELEASE compontent=$COMPONENT
+kubectl delete secrets -l release=$RELEASE,component=$COMPONENT
 
 # Create k8s Secret for Vault SSL Cert (The cert facing users)
 cat /certs/$(ls /certs | grep ".*.crt.chain$") >> /certs/$(ls /certs | grep ".*.crt$")
