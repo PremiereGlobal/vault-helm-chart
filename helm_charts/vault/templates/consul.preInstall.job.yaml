@@ -28,7 +28,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ template "fullname" . }}-{{.Values.Consul.PreInstall.ComponentName}}
-        image: "bartlettc/docker-kubectl"
+        image: "{{.Values.Misc.kubectl.Image}}:{{.Values.Misc.kubectl.ImageTag}}"
         imagePullPolicy: "Always"
         env:
           - name: FULL_NAME
