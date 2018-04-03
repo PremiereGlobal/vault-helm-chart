@@ -27,7 +27,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ template "fullname" . }}-{{.Values.Vault.PreInstall.ComponentName}}
-        image: bartlettc/omgwtfssl-kubernetes
+        image: "{{.Values.Misc.omgwtfssl.Image}}:{{.Values.Misc.omgwtfssl.ImageTag}}"
         imagePullPolicy: "Always"
         env:
           - name: CA_EXPIRE

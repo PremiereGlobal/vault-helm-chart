@@ -112,6 +112,17 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Ui.Replicas` | Vault UI container replicas | `1` |
 | `Vault.Ui.HttpPort` | Vault UI http listening port | `8000` |
 
+Additional dependencies
+
+| Parameter               | Description                           | Default                                                    |
+| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `Misc.kubectl.Image` | Consul Preinstall Job container image name | `bartlettc/docker-kubectl` |
+| `Misc.kubectl.ImageTag` | Consul Preinstall Job container image tag | `latest` |
+| `Misc.omgwtfssl.Image` | Vault Preinstall Job container image name | `bartlettc/omgwtfssl-kubernetes` |
+| `Misc.omgwtfssl.ImageTag` | Vault Preinstall Job container image tag | `latest` |
+| `Misc.letsencrypt.Image` | Let's encrypt container image name | `bartlettc/letsencrypt-acm` |
+| `Misc.letsencrypt.ImageTag` | Let's encrypt container image tag | `kubernetes` |
+
 ### Helm Install
 
 Checkout the repo:
