@@ -30,36 +30,6 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 * Amazon S3 access (optiona, for backups)
 
 ### Configuration
-| Parameter               | Description                           | Default                                                    |
-| ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
-| `Consul.ComponentName`                  | Used for resource names and labeling               | `consul`                                                   |
-| `Consul.Cpu`                   | container requested cpu               | `100m`                                                     |
-| `Consul.Datacenter`         | Consul datacenter name          | `dc1`                                                     |
-| `Consul.Image`                 | Container image name                  | `consul`                                                   |
-| `Consul.ImageTag`              | Container image tag                   | `0.9.0`                                                   |
-| `Consul.ImagePullPolicy`       | Container pull policy                 | `IfNotPresent`                                                   |
-| `Consul.Memory`                | container requested memory            | `512Mi`                                                    |
-| `Consul.Replicas`         | Container replicas          | `5`                                                     |
-| `Consul.HttpPort`              | Consul http listening port            | `8500`                                                     |
-| `Consul.SerflanPort`           | Container serf lan listening port     | `8301`                                                     |
-| `Consul.SerflanUdpPort`        | Container serf lan UDP listening port | `8301`                                                     |
-| `Consul.SerfwanPort`           | Container serf wan listening port     | `8302`                                                     |
-| `Consul.SerfwanUdpPort`        | Container serf wan UDP listening port | `8302`                                                     |
-| `Consul.ServerPort`            | Container server listening port       | `8300`                                                     |
-| `Consul.ConsulDnsPort`         | Container dns listening port          | `8600`                                                     |
-| `Consul.PreInstall.ComponentName`         | Used for resource names and labeling          | `consul-preinstall`                                                     |
-| `Consul.PreInstall.JobDeadline`         | Timeout for Consul pre-install job (seconds)          | `30`                                                     |
-| `Consul.PreInstall.Tls.CountryName`         | TLS cert country name          | ``                                                     |
-| `Consul.PreInstall.Tls.LocalityName`         | TLS cert locality name          | ``                                                     |
-| `Consul.PreInstall.Tls.EmailAddress`         | TLS cert email address          | ``                                                     |
-| `Consul.PreInstall.Tls.OrganizationName`         | TLS cert organization name          | ``                                                     |
-| `Consul.PreInstall.Tls.StateOrProvinceName`         | TLS cert state         | ``                                                     |
-| `Consul.PreInstall.Tls.OrganizationUnitName`         | TLS cert organization unit name          | ``                                                     |
-| `Consul.Ui.ComponentName`         | Used for resource names and labeling          | `consul-ui`                                                     |
-| `Consul.Ui.Enabled`         | Enable the Consul Web UI          | `false`                                                     |
-| `Consul.Ui.Host`         | Host name to respond to (for ingress)          | `localhost`                                                     |
-| `Consul.Ui.AlternateServerNames`         | Alternate host names to respond to (for ingress)          | `127.0.0.1`                                                     |
-
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
@@ -143,11 +113,20 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Ui.HttpPort` | Vault UI http listening port | `8000` |
 
 ### Helm Install
-To install the chart with the release name `vault-prod` in namespace `vault` with the `values-prod` configuration (see [helm_charts/vault](helm_charts/vault) for values definitions):
+
+Checkout the repo:
+```bash
+git clone https://github.com/ReadyTalk/vault-helm-chart.git
+cd vault-helm-chart
+```
+
+To install the chart with the release name `vault` in namespace `vault` with the default configuration (see above for values definitions):
 
 ```bash
-helm install --values helm_charts/vault/values-prod.yaml --name vault-prod --namespace vault helm_charts/vault
+helm install --name vault --namespace vault helm_charts/vault
 ```
+
+> Note:  By default, this chart will install with a self-signed certificate and therefore will require you to pass in the `-tls-skip-verify` to your vault commands.  To pass in your own valid certificate, use the `Vault.Tls` options (see above).
 
 It will take a minute or two for the pre-installation steps to run. Then Helm will finish installing all the necessary resources.
 
