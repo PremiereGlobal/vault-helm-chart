@@ -16,14 +16,15 @@ while [ 1 ]
 do
   echo "Checking if Vault is up and running (try $COUNT)..." &> /proc/1/fd/1
   VAULT_STATUS=$(vault status $1 2>&1)
+  EXIT_STATUS=$?
   if echo "$VAULT_STATUS" | grep "server is not yet initialized"; then
     echo "Vault not initialized.  Must be manually unsealed. Exiting..." &> /proc/1/fd/1
     exit 0
-  elif echo "$VAULT_STATUS" | grep "Sealed: true"; then
+  elif [ $EXIT_STATUS -eq 2 ]; then
     echo "Vault Sealed.  Unsealing..." &> /proc/1/fd/1
     for i in `seq 1 3`
     do
-      vault unseal $1 $(cat /etc/vault/keys/key$i) &> /proc/1/fd/1
+      vault operator unseal $1 $(cat /etc/vault/keys/key$i) &> /proc/1/fd/1
     done
     exit 0
   elif [ $COUNT -ge $LIMIT ]; then
@@ -38,4 +39,3 @@ do
   COUNT=$((COUNT+1))
   sleep 1
 done
-
