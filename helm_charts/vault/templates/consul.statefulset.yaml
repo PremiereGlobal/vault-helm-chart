@@ -11,6 +11,13 @@ metadata:
 spec:
   serviceName: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
   replicas: {{ .Values.Consul.Replicas }}
+  selector:
+    matchLabels:
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      component: {{.Values.Consul.ComponentName}}
+      app: {{ template "name" . }}
   template:
     metadata:
       name: {{ template "fullname" . }}-{{.Values.Consul.ComponentName}}
@@ -67,7 +74,7 @@ spec:
               fieldPath: metadata.namespace
         volumeMounts:
         - name: config
-          mountPath: /consul/config
+          mountPath: /consul/config-ro
         - name: gossip-json
           mountPath: /consul/secrets
           readOnly: true
@@ -93,6 +100,7 @@ spec:
           - "/bin/sh"
           - "-ec"
           - |
+            cp /consul/config-ro/config.json /consul/config/config.json
             IP=$(hostname -i)
 
             for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do

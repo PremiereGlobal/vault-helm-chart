@@ -11,6 +11,13 @@ metadata:
     app: {{ template "name" . }}
 spec:
   replicas: {{.Values.Vault.Ui.Replicas}}
+  selector:
+    matchLabels:
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      component: {{.Values.Vault.Ui.ComponentName}}
+      app: {{ template "name" . }}
   template:
     metadata:
       labels:

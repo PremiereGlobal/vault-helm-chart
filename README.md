@@ -293,8 +293,7 @@ kubectl delete cm ingress-controller-leader-nginx -n vault
 ### Querying Consul
 
 ```
-consul members -client-cert /consul/tls/tls.crt -client-key /consul/tls/tls.key -ca-file /consul/ca/ca.crt.pem -http-addr https://localhost:8500 -tl
-s-server-name server.<datacenter>.consul
+consul members -client-cert /consul/tls/tls.crt -client-key /consul/tls/tls.key -ca-file /consul/ca/ca.crt.pem -http-addr https://localhost:8500 -tls-server-name server.<datacenter>.consul
 ```
 
 ## Future Work
