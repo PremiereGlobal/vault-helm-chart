@@ -38,5 +38,5 @@ spec:
           - name: "VAULT_URL_DEFAULT"
             value: "https://{{.Values.Vault.Tls.ServerName}}:{{.Values.Vault.HttpPort}}"
           - name: "VAULT_AUTH_DEFAULT"
-            value: "TOKEN"
+            value: "{{ .Values.Vault.Ui.AuthDefault }}"
 {{- end }}

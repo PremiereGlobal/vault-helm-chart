@@ -99,6 +99,7 @@ Vault:
     ImagePullPolicy: "Always"
     Replicas: 1
     HttpPort: 8000
+    AuthDefault: "TOKEN"
 Misc:
   kubectl:
     Image: "bartlettc/docker-kubectl"
