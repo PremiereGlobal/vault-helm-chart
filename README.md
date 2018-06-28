@@ -56,10 +56,6 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Consul.PreInstall.Tls.OrganizationName` | TLS cert organization name | `placeholder` |
 | `Consul.PreInstall.Tls.StateOrProvinceName` | TLS cert state | `CO` |
 | `Consul.PreInstall.Tls.OrganizationUnitName` | TLS cert organization unit name | `placeholder` |
-| `Consul.Ui.ComponentName` | Used for resource names and labeling  | `consul-ui` |
-| `Consul.Ui.Enabled` | Enable the Consul Web UI | `false` |
-| `Consul.Ui.Host` | Consul UI ingress hostname | `localhost` |
-| `Consul.Ui.AlternateServerNames` | Consul UI ingress alternative hostnames (comma separated) | `127.0.0.1` |
 | `Consul.Backup.Enabled` | Consul backups enabled | `false` |
 | `Consul.Backup.ComponentName` | Used for resource names and labeling | `backup` |
 | `Consul.Backup.Replicas` | Consul backup container replicas | `1` |
@@ -102,15 +98,7 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Tls.LetsEncrypt.Enabled` | Enable LetsEncrypt support | `false` |
 | `Vault.Tls.LetsEncrypt.Environment` | LetsEncrypt environment (production/stage) | `stage` |
 | `Vault.Tls.LetsEncrypt.AcmeAccountKey` | LetsEncrypt registration key location (s3 bucket), e.g. `s3://my-bucket/stage.pem` | |
-| `Vault.Ui.ComponentName` | Used for resource names and labeling | `vault-ui` |
 | `Vault.Ui.Enabled` | Enable Vault UI | `false` |
-| `Vault.Ui.Host` | Vault UI ingress hostname | `localhost` |
-| `Vault.Ui.AlternateServerNames` | Vault UI ingress alternative hostnames (comma separated) |  |
-| `Vault.Ui.Image` | Vault UI container image name | `djenriquez/vault-ui` |
-| `Vault.Ui.ImageTag` | Vault UI container image tag | `2.2.0` |
-| `Vault.Ui.ImagePullPolicy` | Vault UI container pull policy | `Always` |
-| `Vault.Ui.Replicas` | Vault UI container replicas | `1` |
-| `Vault.Ui.HttpPort` | Vault UI http listening port | `8000` |
 
 Additional dependencies
 
