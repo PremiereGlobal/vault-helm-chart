@@ -28,11 +28,6 @@ Consul:
       OrganizationName: "placeholder"
       StateOrProvinceName: "CO"
       OrganizationUnitName: "placeholder"
-  Ui:
-    ComponentName: "consul-ui"
-    Enabled: false
-    Host: "localhost"
-    AlternateServerNames: "127.0.0.1" # Comma separated
   Backup:
     Enabled: false
     ComponentName: "backup"
@@ -71,7 +66,7 @@ Vault:
   # HostAliases:
   # - ip: "127.0.0.1"
   #   hostnames:
-  #   - "foo.local"  
+  #   - "foo.local"
   DisableConsulRegistration: "false"
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"

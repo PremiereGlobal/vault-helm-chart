@@ -18,5 +18,5 @@ do
   KEY=$(echo "$UNSEAL_KEYS"  | sed "${i}q;d" | base64 --decode)
   kubectl get po -l component=$COMPONENT,release=$RELEASE -n $NAMESPACE \
       | awk '{if(NR>1)print $1}' \
-      | xargs -I % kubectl exec -n $NAMESPACE -c $RELEASE-vault-$COMPONENT % -- sh -c "vault unseal --tls-skip-verify $KEY";
+      | xargs -I % kubectl exec -n $NAMESPACE -c $RELEASE-vault-$COMPONENT % -- sh -c "vault operator unseal --tls-skip-verify $KEY";
 done
