@@ -24,6 +24,7 @@ data:
     disable_mlock = false
     default_lease_ttl = "{{.Values.Vault.DefaultLeaseTtl}}"
     max_lease_ttl = "{{.Values.Vault.MaxLeaseTtl}}"
+    ui = {{.Values.Vault.Ui.Enabled}}
   {{- if .Values.Vault.HostAliases }}
   nsswitch.conf: |
     hosts:          files mdns4_minimal [NOTFOUND=return] dns

@@ -85,16 +85,7 @@ Vault:
       Environment: "stage" # production/stage
       AcmeAccountKey: "s3://<bucket-name>/stage.pem"
   Ui:
-    ComponentName: "vault-ui"
     Enabled: false
-    Host: "localhost"
-    AlternateServerNames: "" # Comma separated
-    Image: "djenriquez/vault-ui"
-    ImageTag: "2.2.0"
-    ImagePullPolicy: "Always"
-    Replicas: 1
-    HttpPort: 8000
-    AuthDefault: "TOKEN"
 Misc:
   kubectl:
     Image: "bartlettc/docker-kubectl"
