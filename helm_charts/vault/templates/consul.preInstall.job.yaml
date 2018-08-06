@@ -60,10 +60,8 @@ spec:
         - "bash"
         - "-ec"
         - |
-          mkdir /scripts
-          cp /pre-install/* /scripts
-          chmod -R +x /scripts
-          cd /scripts
+          chmod -R +x /pre-install
+          cd /pre-install
           ./generate-consul-tls-certs.sh
           ./create-consul-secrets.sh
         volumeMounts:
