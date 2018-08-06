@@ -51,11 +51,12 @@ spec:
         - "bash"
         - "-ec"
         - |
-          chmod -R +x /pre-install
-          cd /pre-install
+          mkdir /scripts
+          cp /pre-install/* /scripts
+          chmod -R +x /scripts
+          cd /scripts
           ./generate-consul-tls-certs.sh
           ./create-consul-secrets.sh
-          # /bin/sleep 1000
         volumeMounts:
         - name: pre-install
           mountPath: /pre-install
