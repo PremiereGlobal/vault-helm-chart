@@ -176,7 +176,7 @@ spec:
       {{- if .Values.Vault.AutoUnseal }}
       - name: vault-keys
         secret:
-          secretName: {{ template "fullname" . }}-keys
+          secretName: {{ template "vault.fullname" . }}-vault-keys
       - name: post-start
         configMap:
           name: {{ template "vault.fullname" . }}-post-start
