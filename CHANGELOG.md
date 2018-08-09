@@ -1,8 +1,8 @@
-# v0.1.2 (Beta)
+# v0.1.2 (master) (Beta)
 
 ### Action Required
 
-* ACTION REQUIRED: In-place upgrades from chart 0.1.0 will require migrating consul data to the new statefulset contained in this release (updated labels to stay with the current Helm way of doing things).  Ensure your Vault/Consul data is backed up before attempting is as it destroy your Consul cluster if not done right.  It may be easier to do a fresh install + restore if possible.
+* ACTION REQUIRED: In-place upgrades from chart 0.1.1 will require migrating consul data to the new statefulset contained in this release (updated name and labels to stay with the current Helm way of doing things).  Ensure your Vault/Consul data is backed up before attempting an upgrade from master as it destroy your Consul cluster if not done right.  It may be easier to do a fresh install + restore if possible.
 
 # v0.1.1
 
