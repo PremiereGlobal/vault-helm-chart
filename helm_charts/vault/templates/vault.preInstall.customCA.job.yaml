@@ -7,7 +7,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: {{ template "vault.chart" . }}
-    component: "{{ .Release.Name }}-{{.Values.Vault.PreInstall.ComponentName}}"
+    component: "{{ .Release.Name }}-{{ .Values.Vault.PreInstall.ComponentName }}"
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "100"

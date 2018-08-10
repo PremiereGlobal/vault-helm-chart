@@ -62,11 +62,11 @@ spec:
             path: config.json
       - name: ca-consul
         secret:
-          secretName: {{ template "fullname" . }}-consul.ca
+          secretName: {{ template "vault.fullname" . }}-consul.ca
       - name: tls-consul
         secret:
-          secretName: {{ template "fullname" . }}-consul.tls
+          secretName: {{ template "vault.fullname" . }}-consul.tls
       - name: gossip-key
         secret:
-          secretName: {{ template "fullname" . }}-consul-gossip-json
+          secretName: {{ template "vault.fullname" . }}-consul-gossip-json
 {{- end }}

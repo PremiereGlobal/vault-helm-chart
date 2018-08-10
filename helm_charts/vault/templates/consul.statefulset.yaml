@@ -88,7 +88,7 @@ spec:
             - "-client-cert=/consul/tls/tls.crt"
             - "-client-key=/consul/tls/tls.key"
             - "-http-addr=https://127.0.0.1:{{.Values.Consul.HttpPort}}"
-            - "-tls-server-name={{ template "fullname" . }}-{{.Values.Consul.ComponentName}}"
+            - "-tls-server-name={{ template "vault.fullname" . }}-{{.Values.Consul.ComponentName}}"
           initialDelaySeconds: 300
           timeoutSeconds: 5
         command:
@@ -128,10 +128,10 @@ spec:
             path: config.json
       - name: gossip-json
         secret:
-          secretName: {{ template "fullname" . }}-consul-gossip-json
+          secretName: {{ template "vault.fullname" . }}-consul-gossip-json
       - name: tls
         secret:
-          secretName: {{ template "fullname" . }}-consul.tls
+          secretName: {{ template "vault.fullname" . }}-consul.tls
       - name: ca
         secret:
-          secretName: {{ template "fullname" . }}-consul.ca
+          secretName: {{ template "vault.fullname" . }}-consul.ca
