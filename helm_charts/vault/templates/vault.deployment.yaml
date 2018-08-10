@@ -169,10 +169,10 @@ spec:
           secretName: {{ template "vault.fullname" . }}.tls
       - name: ca-consul
         secret:
-          secretName: {{ template "fullname" . }}-consul.ca
+          secretName: {{ template "vault.fullname" . }}-consul.ca
       - name: tls-consul
         secret:
-          secretName: {{ template "fullname" . }}-consul.tls
+          secretName: {{ template "vault.fullname" . }}-consul.tls
       {{- if .Values.Vault.AutoUnseal }}
       - name: vault-keys
         secret:
@@ -186,7 +186,7 @@ spec:
           name: "{{ template "vault.fullname" . }}-{{.Values.Vault.ConsulClient.ComponentName}}"
       - name: gossip-json
         secret:
-          secretName: {{ template "fullname" . }}-consul-gossip-json
+          secretName: {{ template "vault.fullname" . }}-consul-gossip-json
       - name: consul-unix-socket
         emptyDir: {}
       {{- if .Values.Vault.HostAliases }}

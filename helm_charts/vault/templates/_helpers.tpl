@@ -1,26 +1,10 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart. (Old method)
-*/}}
-{{- define "name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
 {{/*
 Expand the name of the chart.
 */}}
 {{- define "vault.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name. (Old method)
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-We adjust by 24 to allow for component names in the resource name
-*/}}
-{{- define "fullname" -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 39 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
