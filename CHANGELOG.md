@@ -1,8 +1,8 @@
 # v0.1.2 (Beta)
 
-### Action Required
+### Action Required (Breaking Change)
 
-* ACTION REQUIRED: In-place upgrades from chart 0.1.0 will require migrating consul data to the new statefulset contained in this release (updated labels to stay with the current Helm way of doing things).  Ensure your Vault/Consul data is backed up before attempting is as it destroy your Consul cluster if not done right.  It may be easier to do a fresh install + restore if possible.
+* ACTION REQUIRED: This release contains a major change that standardizes and shortens the naming/labeling conventions of resources created with this Helm chart ([see #40](https://github.com/ReadyTalk/vault-helm-chart/issues/40)). As a result, in-place upgrades from chart v0.1.0 or v0.1.1 by simply doing a `helm upgrade` will result is many breaking issues. It may be possible to upgrade with a complex set of steps but the recommendation is that you backup your Consul cluster and do a fresh `helm install` with the new chart.  Then you can restore your data with a `consul snapshot restore`.  See [0.1.2-MIGRATION.md](0.1.2-MIGRATION.md) for a full set of steps.
 
 # v0.1.1
 
