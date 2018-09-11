@@ -13,6 +13,8 @@ if [ -z "${LOCAL_HELM_CHART}" ]; then
   LOCAL_HELM_CHART=".chart/helm_charts/vault"
 fi
 
+helm delete vault-test --purge
+
 # ./clean_namespace.sh ${NAMESPACE}
 kubectl create ns ${NAMESPACE}
 helm upgrade --install \
@@ -23,5 +25,5 @@ helm upgrade --install \
 
 # TODO: Wait for vault to come up...
 
-../init/vault-init.sh vault-test vault-test true
-../init/vault-unseal.sh vault-test vault-test
+# ../init/vault-init.sh vault-test vault-test true
+# ../init/vault-unseal.sh vault-test vault-test
