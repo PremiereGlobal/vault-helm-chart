@@ -64,18 +64,14 @@ spec:
                   chmod -R +x /post-start
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
-        livenessProbe:
-          # Alive - if it is listening for clustering traffic
-          tcpSocket:
-            port: {{.Values.Vault.HttpPort}}
         readinessProbe:
           # Ready depends on preference
           httpGet:
             scheme: HTTPS
             path: /v1/sys/health?
-              {{- if .Values.Vault.Readiness.readyIfSealed -}}sealedcode=204&{{- end }}
-              {{- if .Values.Vault.Readiness.readyIfStandby -}}standbycode=204&{{- end }}
-              {{- if .Values.Vault.Readiness.readyIfUninitialized -}}uninitcode=204&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfSealed -}}sealedok&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfStandby -}}standbyok&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfUninitialized -}}uninitok&{{- end }}
             port: {{.Values.Vault.HttpPort}}
           initialDelaySeconds: 5
           periodSeconds: 5
