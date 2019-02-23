@@ -112,7 +112,6 @@ spec:
             cpu: {{ .Values.Vault.Cpu }}
             memory: {{ .Values.Vault.Memory }}
         securityContext:
-          readOnlyRootFilesystem: true
           capabilities:
             add:
               - IPC_LOCK
@@ -120,7 +119,6 @@ spec:
         image: "{{.Values.Consul.Image}}:{{.Values.Consul.ImageTag}}"
         imagePullPolicy: "{{.Values.Consul.ImagePullPolicy}}"
         securityContext:
-          readOnlyRootFilesystem: true
         ports:
         - name: http
           containerPort: {{.Values.Consul.HttpPort}}
