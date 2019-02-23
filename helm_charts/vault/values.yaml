@@ -74,8 +74,8 @@ Vault:
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"
   Readiness:
-    readyIfSealed: false
     readyIfStandby: true
+    readyIfSealed: false
     readyIfUninitialized: true
   ConsulClient:
     ComponentName: "consul-client"

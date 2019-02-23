@@ -69,9 +69,9 @@ spec:
           httpGet:
             scheme: HTTPS
             path: /v1/sys/health?
-              {{- if .Values.Vault.Readiness.readyIfSealed -}}sealedok&{{- end }}
-              {{- if .Values.Vault.Readiness.readyIfStandby -}}standbyok&{{- end }}
-              {{- if .Values.Vault.Readiness.readyIfUninitialized -}}uninitok&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfStandby -}}standbycode=429&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfSealed -}}sealedcode=503&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfUninitialized -}}uninitcode=501&{{- end }}
             port: {{.Values.Vault.HttpPort}}
           initialDelaySeconds: 5
           periodSeconds: 5
