@@ -11,7 +11,7 @@ Consul:
   ImagePullPolicy: "IfNotPresent"
   Memory: "256Mi"
   Replicas: 5
-  maxUnavailable: ""
+  maxUnavailable: 2
   HttpPort: 8500
   SerflanPort: 8301
   SerflanUdpPort: 8301
@@ -62,7 +62,7 @@ Vault:
   ImagePullPolicy: "IfNotPresent"
   LogLevel: "info"
   Replicas: 3
-  maxUnavailable: ""
+  maxUnavailable: 1
   Cpu: "512m"
   Memory: "200Mi"
   # HostAliases:
