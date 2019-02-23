@@ -12,6 +12,7 @@ Consul:
   Memory: "256Mi"
   Replicas: 5
   maxUnavailable: 2
+  updatePartition: 0  # Use to control a careful rolling update.
   HttpPort: 8500
   SerflanPort: 8301
   SerflanUdpPort: 8301
@@ -72,6 +73,10 @@ Vault:
   DisableConsulRegistration: "false"
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"
+  readiness:
+    readyIfSealed: false
+    readyIfStandby: true
+    readyIfUninitialized: true
   ConsulClient:
     ComponentName: "consul-client"
   PreInstall:
