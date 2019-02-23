@@ -42,6 +42,8 @@ spec:
             cp /vault/config-ro/config.json /vault/config/config.json
             docker-entrypoint.sh server
         env:
+        - name: "VAULT_CACERT"
+          value: "/vault/tls/ca.crt"
         - name: "VAULT_LOG_LEVEL"
           value: "{{.Values.Vault.LogLevel}}"
         - name: "VAULT_TLS_SERVER_NAME"
