@@ -73,7 +73,7 @@ Vault:
   DisableConsulRegistration: "false"
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"
-  readiness:
+  Readiness:
     readyIfSealed: false
     readyIfStandby: true
     readyIfUninitialized: true
