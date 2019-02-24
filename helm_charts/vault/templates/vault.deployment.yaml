@@ -64,10 +64,6 @@ spec:
                   chmod -R +x /post-start
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
-        livenessProbe:
-          # Alive - if it is listening for clustering traffic
-          tcpSocket:
-            port: {{.Values.Vault.HttpPort}}
         readinessProbe:
           # Ready depends on preference
           httpGet:
