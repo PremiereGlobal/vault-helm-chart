@@ -64,6 +64,11 @@ spec:
                   chmod -R +x /post-start
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /v1/sys/health
+            port: {{.Values.Vault.HttpPort}}
         readinessProbe:
           # Ready depends on preference
           httpGet:
