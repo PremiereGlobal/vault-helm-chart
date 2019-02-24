@@ -65,9 +65,8 @@ spec:
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
         livenessProbe:
-          httpGet:
-            scheme: HTTPS
-            path: /v1/sys/health
+          # Alive - if it is listening for clustering traffic
+          tcpSocket:
             port: {{.Values.Vault.HttpPort}}
         readinessProbe:
           # Ready depends on preference
