@@ -114,7 +114,6 @@ spec:
       - name: "{{ template "vault.fullname" . }}-{{.Values.Vault.ConsulClient.ComponentName}}"
         image: "{{.Values.Consul.Image}}:{{.Values.Consul.ImageTag}}"
         imagePullPolicy: "{{.Values.Consul.ImagePullPolicy}}"
-        securityContext:
         ports:
         - name: http
           containerPort: {{.Values.Consul.HttpPort}}
