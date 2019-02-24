@@ -73,10 +73,6 @@ Vault:
   DisableConsulRegistration: "false"
   DefaultLeaseTtl: "768h"
   MaxLeaseTtl: "768h"
-  Readiness:
-    readyIfStandby: true
-    readyIfSealed: false
-    readyIfUninitialized: true
   ConsulClient:
     ComponentName: "consul-client"
   PreInstall:
