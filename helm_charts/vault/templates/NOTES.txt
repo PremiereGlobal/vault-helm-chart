@@ -3,7 +3,7 @@ Vault has been installed/upgraded.
 It may take several minutes for all of the components to become available.
 
 If this is a new install, initialize Vault by running the following:
-  kubectl exec -it $(kubectl --namespace {{ .Release.Namespace }} get pods -o jsonpath="{.items[0].metadata.name}" -l "component={{ .Release.Name }}-{{ .Values.Vault.ComponentName }}") -c {{ template "vault.fullname" . }} --namespace vault sh
+  kubectl exec -it $(kubectl --namespace {{ .Release.Namespace }} get pods -o jsonpath="{.items[0].metadata.name}" -l "component={{ .Release.Name }}-{{ .Values.Vault.ComponentName }}") -c {{ template "vault.fullname" . }} --namespace {{ .Release.Namespace }} sh
   vault operator init
 
 To unseal Vault, execute into each running pod and execute:

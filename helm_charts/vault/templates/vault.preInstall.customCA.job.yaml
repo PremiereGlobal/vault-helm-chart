@@ -37,7 +37,7 @@ spec:
           - name: SSL_SUBJECT
             value: "{{.Values.Vault.Tls.ServerName}}"
           - name: SSL_DNS
-            value: "{{.Values.Vault.Tls.AlternateServerNames}}"
+            value: "{{.Values.Vault.Tls.AlternateServerNames}},{{- .Release.Name -}}.{{- .Release.Namespace -}}.svc.cluster.local"
           - name: SILENT
             value: "true"
           - name: K8S_SECRET_NAME

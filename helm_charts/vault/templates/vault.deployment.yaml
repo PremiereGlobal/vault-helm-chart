@@ -64,6 +64,13 @@ spec:
                   chmod -R +x /post-start
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
+        livenessProbe:
+          exec:
+            command:
+            - pidof
+            - vault
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
         readinessProbe:
           # Ready depends on preference
           httpGet:
@@ -167,6 +174,13 @@ spec:
               -config-dir=/consul/config \
               -config-dir=/consul/secrets \
               -retry-join={{ template "vault.fullname" . }}-{{.Values.Consul.ComponentName}}
+        livenessProbe:
+          exec:
+            command:
+            - pidof
+            - consul
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
