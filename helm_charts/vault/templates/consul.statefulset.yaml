@@ -11,7 +11,7 @@ spec:
   serviceName: "{{ template "vault.fullname" . }}-{{.Values.Consul.ComponentName}}"
   podManagementPolicy: Parallel
   updateStrategy:
-    {{- if (gt (int .Values.Consul.updatePartition) 0) }}
+  {{- if (gt (int .Values.Consul.updatePartition) 0) }}
     type: RollingUpdate
     rollingUpdate:
       partition: {{ .Values.Consul.updatePartition }}
