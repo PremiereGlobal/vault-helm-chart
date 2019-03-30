@@ -4,12 +4,12 @@
 # Consul storage backend configuration
 Consul:
   ComponentName: "consul"
-  Cpu: "100m"
+  Cpu: "150m"
   Datacenter: "dc1"
   Image: "consul"
-  ImageTag: "1.4.2"
+  ImageTag: "1.4.4"
   ImagePullPolicy: "IfNotPresent"
-  Memory: "256Mi"
+  Memory: "320Mi"
   Replicas: 5
   maxUnavailable: 2
   updatePartition: 0  # Use to control a careful rolling update.
@@ -59,13 +59,13 @@ Vault:
     Enabled: true # If enabled, will use service type ClusterIP
   NodePort: 30825 # Ignored if Ingress.Enabled = true
   Image: "vault"
-  ImageTag: "1.0.3"
+  ImageTag: "1.1.0"
   ImagePullPolicy: "IfNotPresent"
   LogLevel: "info"
   Replicas: 3
   maxUnavailable: 1
   Cpu: "512m"
-  Memory: "200Mi"
+  Memory: "384Mi"
   # HostAliases:
   # - ip: "127.0.0.1"
   #   hostnames:
@@ -81,7 +81,7 @@ Vault:
     ComponentName: "consul-client"
   PreInstall:
     ComponentName: "vault-preinstall"
-    JobDeadline: 100
+    JobDeadline: 200
   Tls:
     ServerName: "vault.consul"
     AlternateServerNames: "vault-alt.consul" # Comma separated
@@ -92,7 +92,7 @@ Vault:
       Environment: "stage" # production/stage
       AcmeAccountKey: "s3://<bucket-name>/stage.pem"
   Ui:
-    Enabled: false
+    Enabled: true
 Misc:
   kubectl:
     Image: "bartlettc/docker-kubectl"
