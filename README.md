@@ -1,6 +1,6 @@
   # Vault
 
-> **UPGRADE WARNING**: There is a breaking change currently in master that will result in loss of data if used as an upgrade from a previous version. See [changelog](CHANGELOG.md) for more details.  The tag v1.1 can safely be used if you're not ready to deal with this change.
+> **Breaking Changes**: New releases may contain breaking changes to this chart as it evolves. Please read the [CHANGELOG](CHANGELOG.md) prior to upgrading.
 
 This project sets up [Vault by Hashicorp](https://www.vaultproject.io/) on Kubernetes using Helm in a HA configuration.  It create its own private Consul backend and secures the Consul and Vault traffic. Also, optionally, a Consul UI and Vault UI can be enabled.
 
