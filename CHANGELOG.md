@@ -1,8 +1,16 @@
-# v0.1.2 (master) (Beta)
+# v0.2.0
+* Added Pod Disruptions Budgets (PDBs) to Consul and Vault
+* Added optional rolling update partitioning for Consul
+* Added AntiAffinities for Consul and Vault
+* Bumped Vault to 1.1.0 and Consul to 1.4.4
+* Added Liveness probes to Consul and Vault
+* Added more configurable Readiness probe for Vault
+
+# v0.1.2
 
 ### Action Required (Breaking Change)
 
-* ACTION REQUIRED: This release contains a major change that standardizes and shortens the naming/labeling conventions of resources created with this Helm chart ([see #40](https://github.com/ReadyTalk/vault-helm-chart/issues/40)). As a result, in-place upgrades from chart v0.1.0 or v0.1.1 by simply doing a `helm upgrade` will result is many breaking issues. It may be possible to upgrade with a complex set of steps but the recommendation is that you backup your Consul cluster and do a fresh `helm install` with the new chart.  Then you can restore your data with a `consul snapshot restore`.  See [0.1.2-MIGRATION.md](0.1.2-MIGRATION.md) for a full set of steps.
+* ACTION REQUIRED: This release contains a major change that standardizes and shortens the naming/labeling conventions of resources created with this Helm chart ([see #40](https://github.com/ReadyTalk/vault-helm-chart/issues/40)). As a result, in-place upgrades from chart v0.1.0 or v0.1.1 by simply doing a `helm upgrade` will result is many breaking issues. It may be possible to upgrade with a complex set of steps but the recommendation is that you backup your Consul cluster and do a fresh `helm install` with the new chart.  Then you can restore your data with a `consul snapshot restore`.  See the [0.1.2 migration guide](docs/0.1.2-MIGRATION.md) for a full set of steps.
 
 # v0.1.1
 
