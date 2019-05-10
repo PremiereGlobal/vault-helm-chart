@@ -20,6 +20,10 @@ data:
       tls_key_file = "/vault/tls/tls.key"
       tls_cert_file = "/vault/tls/tls.crt"
     }
+    telemetry {
+      prometheus_retention_time = "24h"
+      disable_hostname = true
+    }
     disable_mlock = false
     default_lease_ttl = "{{.Values.Vault.DefaultLeaseTtl}}"
     max_lease_ttl = "{{.Values.Vault.MaxLeaseTtl}}"
