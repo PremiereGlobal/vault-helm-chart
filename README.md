@@ -43,6 +43,8 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Consul.ImagePullPolicy` | Consul container pull policy | `IfNotPresent` |
 | `Consul.Memory` | Consul container requested memory | `256Mi` |
 | `Consul.Replicas` | Consul container replicas | `5` |
+| `Consul.maxUnavailable` | Consul container PodDisruptionBudget maxUnavailable instances | `2` |
+| `Consul.updatePartition` | Consul container updatePartition number for Phased Roll Outs | `0` |
 | `Consul.HttpPort` | Consul http listening port | `8500` |
 | `Consul.SerflanPort` | Consul serf lan listening port | `8301` |
 | `Consul.SerflanUdpPort` | Consul serf lan UDP listening port | `8301` |
@@ -84,6 +86,10 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.ImagePullPolicy` | Vault container pull policy | `IfNotPresent`
 | `Vault.LogLevel` | Set vault log level (trace, debug, info, etc.) | `info` |
 | `Vault.Replicas` | Vault container replicas | `3` |
+| `Vault.maxUnavailable` | Vault container PodDisruptionBudget maxUnavailable instances | `1` |
+| `Vault.Readiness.readyIfStandby` | Mark Vault pods as ready to start accepting traffic when `Standby` status is reached | `true` |
+| `Vault.Readiness.readyIfSealed` | Mark Vault pods as ready to start accepting traffic when `Sealed` status is reached | `false` |
+| `Vault.Readiness.readyIfUninitialized` | Mark Vault pods as ready to start accepting traffic when `Uninitialized` status is reached | `true` |
 | `Vault.Cpu` | Vault container requested cpu | `512m` |
 | `Vault.Memory` | Vault container requested memory | `200Mi` |
 | `Vault.HostAliases` | List of hostfile entries, see [docs](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) for details and format |  |

@@ -1,0 +1,22 @@
+# PodDisruptionBudget to prevent degrading the Vault cluster through
+# voluntary cluster changes.
+{{- if (and (ne (.Values.Vault.maxUnavailable | toString) "-") .Values.Vault.maxUnavailable) }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "vault.fullname" . }}-{{.Values.Vault.ComponentName}}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ template "vault.chart" . }}
+    component: "{{ .Release.Name }}-{{.Values.Vault.ComponentName}}"
+spec:
+  maxUnavailable: {{ template "vault.pdb.maxUnavailable" . }}
+  selector:
+    matchLabels:
+      heritage: {{ .Release.Service | quote }}
+      release: {{ .Release.Name | quote }}
+      chart: {{ template "vault.chart" . }}
+      component: "{{ .Release.Name }}-{{.Values.Vault.ComponentName}}"
+{{- end }}
+
