@@ -9,8 +9,15 @@ metadata:
     component: "{{ .Release.Name }}-{{ .Values.Consul.ComponentName }}"
 spec:
   serviceName: "{{ template "vault.fullname" . }}-{{.Values.Consul.ComponentName}}"
+  podManagementPolicy: Parallel
   updateStrategy:
+  {{- if (gt (int .Values.Consul.updatePartition) 0) }}
+    type: RollingUpdate
+    rollingUpdate:
+      partition: {{ .Values.Consul.updatePartition }}
+  {{- else -}}
     type: "OnDelete"
+  {{- end }}
   replicas: {{ .Values.Consul.Replicas }}
   selector:
     matchLabels:
@@ -25,6 +32,14 @@ spec:
         chart: {{ template "vault.chart" . }}
         component: "{{ .Release.Name }}-{{ .Values.Consul.ComponentName }}"
     spec:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                release: {{ .Release.Name | quote }}
+                component: "{{ .Release.Name }}-{{ .Values.Consul.ComponentName }}"
+            topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 10
       securityContext:
         fsGroup: 1000
       containers:

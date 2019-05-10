@@ -9,6 +9,10 @@ metadata:
     component: "{{ .Release.Name }}-{{ .Values.Vault.ComponentName }}"
 spec:
   replicas: {{ .Values.Vault.Replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       release: {{ .Release.Name | quote }}
@@ -42,6 +46,8 @@ spec:
             cp /vault/config-ro/config.json /vault/config/config.json
             docker-entrypoint.sh server
         env:
+        - name: "VAULT_CACERT"
+          value: "/vault/tls/ca.crt"
         - name: "VAULT_LOG_LEVEL"
           value: "{{.Values.Vault.LogLevel}}"
         - name: "VAULT_TLS_SERVER_NAME"
@@ -58,10 +64,21 @@ spec:
                   chmod -R +x /post-start
                   /post-start/unseal-vault.sh {{ template "tls_skip_verify" . }}
         {{- end }}
+        livenessProbe:
+          exec:
+            command:
+            - pidof
+            - vault
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
         readinessProbe:
+          # Ready depends on preference
           httpGet:
             scheme: HTTPS
-            path: /v1/sys/health?standbyok
+            path: /v1/sys/health?
+              {{- if .Values.Vault.Readiness.readyIfStandby -}}standbycode=204&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfSealed -}}sealedcode=204&{{- end }}
+              {{- if .Values.Vault.Readiness.readyIfUninitialized -}}uninitcode=204&{{- end }}
             port: {{.Values.Vault.HttpPort}}
           initialDelaySeconds: 5
           periodSeconds: 5
@@ -157,6 +174,22 @@ spec:
               -config-dir=/consul/config \
               -config-dir=/consul/secrets \
               -retry-join={{ template "vault.fullname" . }}-{{.Values.Consul.ComponentName}}
+        livenessProbe:
+          exec:
+            command:
+            - pidof
+            - consul
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                release: {{ .Release.Name | quote }}
+                component: "{{ .Release.Name }}-{{ .Values.Vault.ComponentName }}"
       volumes:
       - name: config
         configMap:
