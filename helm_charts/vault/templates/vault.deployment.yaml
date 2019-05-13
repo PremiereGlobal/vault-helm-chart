@@ -54,8 +54,10 @@ spec:
         args:
           - "server"
         env:
+        {{- if not (and .Values.Vault.Tls.CertManager .Values.Vault.Tls.CertManager.CertficateSpec) }}
         - name: "VAULT_CACERT"
           value: "/vault/tls/ca.crt"
+        {{- end }}
         - name: "VAULT_LOG_LEVEL"
           value: "{{.Values.Vault.LogLevel}}"
         - name: "VAULT_TLS_SERVER_NAME"
