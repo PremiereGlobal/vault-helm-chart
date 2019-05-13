@@ -1,3 +1,6 @@
+# v0.3.0
+* Removing custom LetsEncrypt support in favor of CertManager
+
 # v0.2.0
 * Added Pod Disruptions Budgets (PDBs) to Consul and Vault
 * Added optional rolling update partitioning for Consul

@@ -87,10 +87,27 @@ Vault:
     AlternateServerNames: "vault-alt.consul" # Comma separated
     CertString: ""
     KeyString: ""
-    LetsEncrypt:
+    CertManager:
+
+      # Enable the user of cert-manager to issue certificates
       Enabled: false
-      Environment: "stage" # production/stage
-      AcmeAccountKey: "s3://<bucket-name>/stage.pem"
+
+      # Contains the spec for the certificate minus the secret name which will
+      # automatically be generated
+      # CertficateSpec:
+      #   dnsNames:
+      #   - foo.example.com
+      #   - bar.example.com
+      #   acme:
+      #     config:
+      #     - http01:
+      #         ingressClass: nginx
+      #       domains:
+      #       - foo.example.com
+      #       - bar.example.com
+      #   issuerRef:
+      #     name: letsencrypt-prod
+      #     kind: Issuer
   Ui:
     Enabled: true
 Misc:
