@@ -21,6 +21,7 @@ Consul:
   SerfwanUdpPort: 8302
   ServerPort: 8300
   ConsulDnsPort: 8600
+  # PodManagementPolicy: "Parallel"
   PreInstall:
     ComponentName: "consul-preinstall"
     JobDeadline: 60
@@ -113,7 +114,7 @@ Vault:
       # The certReloader is a cronjob that sends a SIGHUP to the vault processes
       # once per day to pick up new certs when they rotate
       certReloader:
-        name: cert-reloader      
+        name: cert-reloader
   Ui:
     Enabled: true
 Misc:
