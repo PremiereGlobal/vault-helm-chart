@@ -1,5 +1,6 @@
-# Default values for Vault.
-# This is a YAML-formatted file.
+## Enable RBAC as per https://github.com/kubernetes/ingress/tree/master/examples/rbac/nginx and https://github.com/kubernetes/ingress/issues/266
+rbac:
+  create: true
 
 # Consul storage backend configuration
 Consul:
@@ -108,6 +109,11 @@ Vault:
       #   issuerRef:
       #     name: letsencrypt-prod
       #     kind: Issuer
+
+      # The certReloader is a cronjob that sends a SIGHUP to the vault processes
+      # once per day to pick up new certs when they rotate
+      certReloader:
+        name: cert-reloader      
   Ui:
     Enabled: true
 Misc:

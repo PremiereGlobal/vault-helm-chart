@@ -35,6 +35,7 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 
 | Parameter               | Description                           | Default                                                    |
 | ----------------------- | ----------------------------------    | ---------------------------------------------------------- |
+| `rbac.create` | Create RBAC service accounts, roles and rolebindings for components | `true` |
 | `Consul.ComponentName` | Used for resource names and labeling | `consul` |
 | `Consul.Cpu` | Consul container requested cpu | `100m` |
 | `Consul.Datacenter` | Consul datacenter name | `dc1` |
@@ -103,9 +104,8 @@ It isn't hard to [get started](https://www.vaultproject.io/intro/getting-started
 | `Vault.Tls.AlternateServerNames` | Vault TLS/ingress alternative hostnames (comma separated) | `vault-alt.consul` |
 | `Vault.Tls.CertString` | Provide a TLS certificate file to use in Vault's listener |  |
 | `Vault.Tls.KeyString` | Provide a TLS certificate key file to use in Vault's listener |  |
-| `Vault.Tls.LetsEncrypt.Enabled` | Enable LetsEncrypt support | `false` |
-| `Vault.Tls.LetsEncrypt.Environment` | LetsEncrypt environment (production/stage) | `stage` |
-| `Vault.Tls.LetsEncrypt.AcmeAccountKey` | LetsEncrypt registration key location (s3 bucket), e.g. `s3://my-bucket/stage.pem` | |
+| `Vault.Tls.CertManager.Enabled` | Enable cert-manager certs | `false` |
+| `Vault.Tls.CertManager.certReloader.name` | Name given to the cert-manager reload resources | `cert-reloader` |
 | `Vault.Ui.Enabled` | Enable Vault UI | `false` |
 
 Additional dependencies
