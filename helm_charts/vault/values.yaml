@@ -84,6 +84,9 @@ Vault:
   PreInstall:
     ComponentName: "vault-preinstall"
     JobDeadline: 60
+  # config:
+  #   tcpAdditionalOptions: |
+  #     tls_disable_client_certs = "true"
   Tls:
     ServerName: "vault.consul"
     AlternateServerNames: "vault-alt.consul" # Comma separated
