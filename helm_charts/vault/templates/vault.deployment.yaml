@@ -24,6 +24,8 @@ spec:
         release: {{ .Release.Name | quote }}
         chart: {{ template "vault.chart" . }}
         component: "{{ .Release.Name }}-{{ .Values.Vault.ComponentName }}"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/vault.configMap.yaml") . | sha256sum }}        
     spec:
       {{- if .Values.Vault.HostAliases }}
       hostAliases:
